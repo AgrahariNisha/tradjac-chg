@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TradJac — Trusted 3PL Partner | Cold Storage & Logistics</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#e8f5f5',
+                            100: '#d1eded',
+                            200: '#a3dbdb',
+                            300: '#75c9c9',
+                            400: '#47b7b7',
+                            500: '#197d7d',
+                            600: '#146464',
+                            700: '#0f4b4b',
+                            800: '#0a3232',
+                            900: '#051919',
+                        },
+                        gold: {
+                            50: '#fdf8ed',
+                            100: '#fbefd4',
+                            200: '#f7dfa9',
+                            300: '#f3cf7e',
+                            400: '#efbf53',
+                            500: '#c88e1e',
+                            600: '#a07218',
+                            700: '#785612',
+                            800: '#503a0c',
+                            900: '#281e06',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+        ::selection { background: #197d7d; color: #ffffff; }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .hero-gradient {
+            background: linear-gradient(135deg, #051919 0%, #0a3232 30%, #197d7d 100%);
+        }
+        .gold-glow {
+            box-shadow: 0 0 30px rgba(200, 142, 30, 0.15);
+        }
+        .teal-glow {
+            box-shadow: 0 0 40px rgba(25, 125, 125, 0.2);
+        }
+        .card-hover { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .card-hover:hover { transform: translateY(-6px); box-shadow: 0 25px 50px -12px rgba(25, 125, 125, 0.15); }
+        .stat-card { position: relative; overflow: hidden; }
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 4px;
+            background: linear-gradient(90deg, #197d7d, #c88e1e);
+        }
+        .float-animation { animation: float 6s ease-in-out infinite; }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        .pulse-dot { animation: pulse-dot 2s ease-in-out infinite; }
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.5); }
+        }
+        .line-draw { animation: line-draw 2s ease-out forwards; }
+        @keyframes line-draw { from { width: 0; } to { width: 80px; } }
+        .fade-up { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
+        .fade-up.visible { opacity: 1; transform: translateY(0); }
+        .nav-active { color: #c88e1e !important; }
+        .mobile-menu { transform: translateX(100%); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .mobile-menu.open { transform: translateX(0); }
+        .toast { transform: translateY(100px); opacity: 0; transition: all 0.4s ease; }
+        .toast.show { transform: translateY(0); opacity: 1; }
+    </style>
+</head>
+<body class="font-sans bg-white text-gray-900">
+
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300" style="background: rgba(255,255,255,0.9); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(25,125,125,0.08);">
+        <div class="max-w-[1440px] mx-auto px-6 h-[72px] flex items-center justify-between">
+            <!-- Logo -->
+            <a href="#home" class="flex items-center gap-2 group">
+                <div class="w-10 h-10 bg-brand-500 rounded-xl flex items-center justify-center transition-transform duration-300 group-hover:scale-105">
+                    <span class="text-white font-bold text-lg">T</span>
+                </div>
+                <span class="text-xl font-semibold text-brand-800 tracking-tight">Trad<span class="text-gold-500">Jac</span></span>
+            </a>
+
+            <!-- Desktop Links -->
+            <div class="hidden md:flex items-center gap-8">
+                <a href="#home" class="nav-link text-sm font-medium text-gray-600 hover:text-brand-500 transition-colors duration-200">Home</a>
+                <a href="#services" class="nav-link text-sm font-medium text-gray-600 hover:text-brand-500 transition-colors duration-200">Services</a>
+                <a href="#about" class="nav-link text-sm font-medium text-gray-600 hover:text-brand-500 transition-colors duration-200">About</a>
+                <a href="#contact" class="nav-link text-sm font-medium text-gray-600 hover:text-brand-500 transition-colors duration-200">Contact</a>
+            </div>
+
+            <!-- CTA + Mobile Toggle -->
+            <div class="flex items-center gap-4">
+                <a href="#contact" class="hidden md:inline-flex items-center gap-2 bg-brand-500 text-white text-sm font-medium px-5 py-2.5 rounded-xl hover:bg-brand-600 transition-colors duration-200">
+                    Get Started
+                    <iconify-icon icon="lucide:arrow-right" width="16"></iconify-icon>
+                </a>
+                <button id="menuToggle" class="md:hidden w-10 h-10 flex items-center justify-center rounded-lg hover:bg-gray-100 transition-colors">
+                    <iconify-icon icon="lucide:menu" width="24" class="text-brand-800" id="menuIcon"></iconify-icon>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="mobile-menu fixed top-0 right-0 bottom-0 w-[280px] bg-white z-[60] shadow-2xl p-6 flex flex-col">
+        <div class="flex justify-between items-center mb-10">
+            <span class="text-lg font-semibold text-brand-800">Trad<span class="text-gold-500">Jac</span></span>
+            <button id="menuClose" class="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-gray-100">
+                <iconify-icon icon="lucide:x" width="24" class="text-gray-600"></iconify-icon>
+            </button>
+        </div>
+        <div class="flex flex-col gap-1">
+            <a href="#home" class="mobile-link px-4 py-3 rounded-xl text-gray-700 font-medium hover:bg-brand-50 hover:text-brand-500 transition-colors">Home</a>
+            <a href="#services" class="mobile-link px-4 py-3 rounded-xl text-gray-700 font-medium hover:bg-brand-50 hover:text-brand-500 transition-colors">Services</a>
+            <a href="#about" class="mobile-link px-4 py-3 rounded-xl text-gray-700 font-medium hover:bg-brand-50 hover:text-brand-500 transition-colors">About</a>
+            <a href="#contact" class="mobile-link px-4 py-3 rounded-xl text-gray-700 font-medium hover:bg-brand-50 hover:text-brand-500 transition-colors">Contact</a>
+        </div>
+        <div class="mt-auto">
+            <a href="#contact" class="flex items-center justify-center gap-2 w-full bg-brand-500 text-white font-medium px-5 py-3 rounded-xl hover:bg-brand-600 transition-colors">
+                Get Started
+                <iconify-icon icon="lucide:arrow-right" width="16"></iconify-icon>
+            </a>
+        </div>
+    </div>
+    <div id="menuOverlay" class="fixed inset-0 bg-black/30 z-[55] hidden opacity-0 transition-opacity duration-300"></div>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-gradient relative min-h-screen flex items-center overflow-hidden">
+        <!-- Decorative Elements -->
+        <div class="absolute top-20 right-10 w-[500px] h-[500px] rounded-full opacity-10" style="background: radial-gradient(circle, #c88e1e, transparent 70%);"></div>
+        <div class="absolute bottom-10 left-10 w-[400px] h-[400px] rounded-full opacity-5" style="background: radial-gradient(circle, #ffffff, transparent 70%);"></div>
+        <div class="absolute top-1/3 left-1/4 w-2 h-2 bg-gold-500 rounded-full pulse-dot"></div>
+        <div class="absolute top-1/2 right-1/3 w-3 h-3 bg-brand-300 rounded-full pulse-dot" style="animation-delay: 1s;"></div>
+        <div class="absolute bottom-1/3 right-1/4 w-2 h-2 bg-gold-400 rounded-full pulse-dot" style="animation-delay: 0.5s;"></div>
+
+        <div class="max-w-[1440px] mx-auto px-6 pt-[120px] pb-20 w-full">
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
+                <!-- Left Content -->
+                <div class="fade-up">
+                    <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/10 rounded-full px-4 py-2 mb-8">
+                        <span class="w-2 h-2 bg-gold-500 rounded-full pulse-dot"></span>
+                        <span class="text-brand-100 text-xs font-medium uppercase tracking-wider">Since 2009 — Trusted 3PL Partner</span>
+                    </div>
+                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-semibold text-white leading-[1.1] tracking-tight mb-6">
+                        Cold Storage,<br>
+                        <span class="text-gold-400">Warehousing</span><br>
+                        & Logistics
+                    </h1>
+                    <p class="text-lg text-brand-200 leading-relaxed max-w-lg mb-10">
+                        Delivering efficiency, safety, and reliability across your supply chain. Temperature-controlled solutions tailored for your business.
+                    </p>
+                    <div class="flex flex-wrap gap-4">
+                        <a href="#contact" class="inline-flex items-center gap-2 bg-gold-500 text-white font-medium px-7 py-3.5 rounded-xl hover:bg-gold-600 transition-all duration-200 gold-glow">
+                            Get In Touch
+                            <iconify-icon icon="lucide:arrow-right" width="18"></iconify-icon>
+                        </a>
+                        <a href="#about" class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm text-white font-medium px-7 py-3.5 rounded-xl border border-white/20 hover:bg-white/20 transition-all duration-200">
+                            Learn More
+                        </a>
+                    </div>
+                    <!-- Mini Stats -->
+                    <div class="flex gap-10 mt-14 pt-8 border-t border-white/10">
+                        <div>
+                            <div class="text-3xl font-semibold text-white">100K+</div>
+                            <div class="text-sm text-brand-300 mt-1">Pallets Stored</div>
+                        </div>
+                        <div>
+                            <div class="text-3xl font-semibold text-white">50+</div>
+                            <div class="text-sm text-brand-300 mt-1">Reefer Trucks</div>
+                        </div>
+                        <div>
+                            <div class="text-3xl font-semibold text-white">15+</div>
+                            <div class="text-sm text-brand-300 mt-1">Years Experience</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Visual -->
+                <div class="hidden lg:flex justify-center items-center relative">
+                    <div class="float-animation relative">
+                        <div class="w-[420px] h-[420px] rounded-3xl overflow-hidden border border-white/10 teal-glow">
+                            <img src="assets/Pictures (1)_page-0002.jpg" alt="Cold Storage Facility" class="w-full h-full object-cover opacity-80">
+                            <div class="absolute inset-0 bg-gradient-to-t from-brand-900/80 via-transparent to-transparent"></div>
+                        </div>
+                        <!-- Floating Card 1 -->
+                        <div class="absolute -left-16 top-12 bg-white/95 backdrop-blur-sm rounded-2xl p-4 shadow-xl flex items-center gap-3" style="animation: float 5s ease-in-out infinite; animation-delay: 0.5s;">
+                            <div class="w-11 h-11 bg-blue-50 rounded-xl flex items-center justify-center">
+                                <iconify-icon icon="lucide:thermometer-snowflake" width="22" class="text-blue-500"></iconify-icon>
+                            </div>
+                            <div>
+                                <div class="text-sm font-semibold text-gray-900">Cold Storage</div>
+                                <div class="text-xs text-gray-500">-18°C to +8°C</div>
+                            </div>
+                        </div>
+                        <!-- Floating Card 2 -->
+                        <div class="absolute -right-12 bottom-24 bg-white/95 backdrop-blur-sm rounded-2xl p-4 shadow-xl flex items-center gap-3" style="animation: float 5s ease-in-out infinite; animation-delay: 1s;">
+                            <div class="w-11 h-11 bg-green-50 rounded-xl flex items-center justify-center">
+                                <iconify-icon icon="lucide:truck" width="22" class="text-green-500"></iconify-icon>
+                            </div>
+                            <div>
+                                <div class="text-sm font-semibold text-gray-900">Reefer Transport</div>
+                                <div class="text-xs text-gray-500">Pan-India Network</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scroll Indicator -->
+        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
+            <span class="text-xs text-brand-300 uppercase tracking-widest">Scroll</span>
+            <div class="w-5 h-8 border-2 border-brand-300/50 rounded-full flex justify-center pt-1.5">
+                <div class="w-1 h-2 bg-gold-500 rounded-full" style="animation: float 2s ease-in-out infinite;"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-24 lg:py-32 bg-gray-50">
+        <div class="max-w-[1440px] mx-auto px-6">
+            <div class="text-center max-w-2xl mx-auto mb-16 fade-up">
+                <div class="inline-flex items-center gap-2 bg-brand-50 rounded-full px-4 py-2 mb-6">
+                    <iconify-icon icon="lucide:layers" width="16" class="text-brand-500"></iconify-icon>
+                    <span class="text-xs font-medium text-brand-600 uppercase tracking-wider">What We Do</span>
+                </div>
+                <h2 class="text-3xl md:text-4xl font-semibold text-gray-900 tracking-tight mb-4">End-to-End Logistics Solutions</h2>
+                <div class="w-20 h-1 bg-gradient-to-r from-brand-500 to-gold-500 rounded-full mx-auto mb-6 line-draw"></div>
+                <p class="text-gray-500 leading-relaxed">From cold storage to last-mile delivery, we provide comprehensive 3PL services designed to protect your products and streamline your supply chain.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Service 1 -->
+                <div class="card-hover bg-white rounded-2xl p-8 border border-gray-100 group fade-up">
+                    <div class="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-blue-100 group-hover:scale-110 transition-all duration-300">
+                        <iconify-icon icon="lucide:thermometer-snowflake" width="28" class="text-blue-500"></iconify-icon>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Cold Storage</h3>
+                    <p class="text-gray-500 text-sm leading-relaxed mb-6">Temperature-controlled warehousing from -18°C to +8°C. Multi-commodity storage with real-time monitoring and hygiene compliance.</p>
+                    <div class="flex items-center gap-2 text-brand-500 text-sm font-medium group-hover:gap-3 transition-all duration-200">
+                        <span>Learn more</span>
+                        <iconify-icon icon="lucide:arrow-right" width="16"></iconify-icon>
+                    </div>
+                </div>
+
+                <!-- Service 2 -->
+                <div class="card-hover bg-white rounded-2xl p-8 border border-gray-100 group fade-up" style="transition-delay: 0.1s;">
+                    <div class="w-14 h-14 bg-green-50 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-green-100 group-hover:scale-110 transition-all duration-300">
+                        <iconify-icon icon="lucide:warehouse" width="28" class="text-green-500"></iconify-icon>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Warehousing</h3>
+                    <p class="text-gray-500 text-sm leading-relaxed mb-6">Modern warehouse facilities with pallet management, inventory tracking, FIFO/FEFO systems, and scalable storage solutions.</p>
+                    <div class="flex items-center gap-2 text-brand-500 text-sm font-medium group-hover:gap-3 transition-all duration-200">
+                        <span>Learn more</span>
+                        <iconify-icon icon="lucide:arrow-right" width="16"></iconify-icon>
+                    </div>
+                </div>
+
+                <!-- Service 3 -->
+                <div class="card-hover bg-white rounded-2xl p-8 border border-gray-100 group fade-up" style="transition-delay: 0.2s;">
+                    <div class="w-14 h-14 bg-orange-50 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-orange-100 group-hover:scale-110 transition-all duration-300">
+                        <iconify-icon icon="lucide:truck" width="28" class="text-orange-500"></iconify-icon>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Reefer Transportation</h3>
+                    <p class="text-gray-500 text-sm leading-relaxed mb-6">Fleet of 50+ temperature-controlled trucks ensuring product integrity during transit across India's major routes.</p>
+                    <div class="flex items-center gap-2 text-brand-500 text-sm font-medium group-hover:gap-3 transition-all duration-200">
+                        <span>Learn more</span>
+                        <iconify-icon icon="lucide:arrow-right" width="16"></iconify-icon>
+                    </div>
+                </div>
+
+                <!-- Service 4 -->
+                <div class="card-hover bg-white rounded-2xl p-8 border border-gray-100 group fade-up">
+                    <div class="w-14 h-14 bg-purple-50 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-purple-100 group-hover:scale-110 transition-all duration-300">
+                        <iconify-icon icon="lucide:package-search" width="28" class="text-purple-500"></iconify-icon>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">3PL Solutions</h3>
+                    <p class="text-gray-500 text-sm leading-relaxed mb-6">Integrated third-party logistics — from order management to dispatch — letting you focus on growing your core business.</p>
+                    <div class="flex items-center gap-2 text-brand-500 text-sm font-medium group-hover:gap-3 transition-all duration-200">
+                        <span>Learn more</span>
+                        <iconify-icon icon="lucide:arrow-right" width="16"></iconify-icon>
+                    </div>
+                </div>
+
+                <!-- Service 5 -->
+                <div class="card-hover bg-white rounded-2xl p-8 border border-gray-100 group fade-up" style="transition-delay: 0.1s;">
+                    <div class="w-14 h-14 bg-rose-50 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-rose-100 group-hover:scale-110 transition-all duration-300">
+                        <iconify-icon icon="lucide:bar-chart-3" width="28" class="text-rose-500"></iconify-icon>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Supply Chain Analytics</h3>
+                    <p class="text-gray-500 text-sm leading-relaxed mb-6">Technology-driven visibility and control with real-time dashboards, inventory reports, and performance analytics.</p>
+                    <div class="flex items-center gap-2 text-brand-500 text-sm font-medium group-hover:gap-3 transition-all duration-200">
+                        <span>Learn more</span>
+                        <iconify-icon icon="lucide:arrow-right" width="16"></iconify-icon>
+                    </div>
+                </div>
+
+                <!-- Service 6 -->
+                <div class="card-hover bg-white rounded-2xl p-8 border border-gray-100 group fade-up" style="transition-delay: 0.2s;">
+                    <div class="w-14 h-14 bg-teal-50 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-teal-100 group-hover:scale-110 transition-all duration-300">
+                        <iconify-icon icon="lucide:shield-check" width="28" class="text-teal-500"></iconify-icon>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Quality & Compliance</h3>
+                    <p class="text-gray-500 text-sm leading-relaxed mb-6">FSSAI-compliant facilities with strict hygiene protocols, batch tracking, and quality checks at every touchpoint.</p>
+                    <div class="flex items-center gap-2 text-brand-500 text-sm font-medium group-hover:gap-3 transition-all duration-200">
+                        <span>Learn more</span>
+                        <iconify-icon icon="lucide:arrow-right" width="16"></iconify-icon>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-24 lg:py-32 bg-white">
+        <div class="max-w-[1440px] mx-auto px-6">
+            <!-- Story -->
+            <div class="grid lg:grid-cols-2 gap-16 items-center mb-24 fade-up">
+                <div class="relative">
+                    <div class="rounded-3xl overflow-hidden">
+                        <img src="assets/Pictures (1)_page-0008.jpg       " alt="TradJac Warehouse" class="w-full h-[400px] lg:h-[500px] object-cover">
+                    </div>
+                    <div class="absolute -bottom-6 -right-6 bg-brand-500 text-white rounded-2xl p-6 shadow-xl hidden md:block">
+                        <div class="text-3xl font-semibold">15+</div>
+                        <div class="text-sm text-brand-100">Years of<br>Excellence</div>
+                    </div>
+                </div>
+                <div>
+                    <div class="inline-flex items-center gap-2 bg-brand-50 rounded-full px-4 py-2 mb-6">
+                        <iconify-icon icon="lucide:book-open" width="16" class="text-brand-500"></iconify-icon>
+                        <span class="text-xs font-medium text-brand-600 uppercase tracking-wider">Our Story</span>
+                    </div>
+                    <h2 class="text-3xl md:text-4xl font-semibold text-gray-900 tracking-tight mb-4">
+                        Built on Trust,<br><span class="text-brand-500">Driven by Innovation</span>
+                    </h2>
+                    <div class="w-20 h-1 bg-gradient-to-r from-brand-500 to-gold-500 rounded-full mb-6 line-draw"></div>
+                    <p class="text-gray-500 leading-relaxed mb-4">
+                        Since 2009, TradJac has evolved from a regional logistics provider into a trusted 3PL partner for businesses across India.
+                    </p>
+                    <p class="text-gray-500 leading-relaxed mb-8">
+                        The foundation of TradJac's cold storage facility was shaped by the vision of Mr. Badruddin Faiyaz Valikarimwala and Yogesh Rathod. Their dedication and leadership helped create a modern cold chain facility focused on reliability, product safety, and operational excellence.
+                    </p>
+                    <div class="space-y-4">
+                        <div class="flex items-start gap-3">
+                            <div class="w-6 h-6 bg-brand-50 rounded-lg flex items-center justify-center mt-0.5 shrink-0">
+                                <iconify-icon icon="lucide:check" width="14" class="text-brand-500"></iconify-icon>
+                            </div>
+                            <span class="text-sm text-gray-600">Modern infrastructure with end-to-end cold chain support</span>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <div class="w-6 h-6 bg-brand-50 rounded-lg flex items-center justify-center mt-0.5 shrink-0">
+                                <iconify-icon icon="lucide:check" width="14" class="text-brand-500"></iconify-icon>
+                            </div>
+                            <span class="text-sm text-gray-600">Technology-driven operations for visibility and control</span>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <div class="w-6 h-6 bg-brand-50 rounded-lg flex items-center justify-center mt-0.5 shrink-0">
+                                <iconify-icon icon="lucide:check" width="14" class="text-brand-500"></iconify-icon>
+                            </div>
+                            <span class="text-sm text-gray-600">Trusted by businesses seeking scalable logistics solutions</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats -->
+            <div class="grid md:grid-cols-2 gap-6 mb-24">
+                <div class="stat-card bg-gradient-to-br from-brand-500 to-brand-700 rounded-2xl p-8 text-white fade-up">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="w-14 h-14 bg-white/15 rounded-2xl flex items-center justify-center">
+                            <iconify-icon icon="lucide:package" width="28" class="text-gold-300"></iconify-icon>
+                        </div>
+                        <div class="text-4xl font-semibold">100K+</div>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2">Pallets Stored</h3>
+                    <p class="text-brand-200 text-sm leading-relaxed">Handled with precision across modern warehouse facilities with real-time tracking systems.</p>
+                </div>
+                <div class="stat-card bg-gradient-to-br from-gold-500 to-gold-700 rounded-2xl p-8 text-white fade-up" style="transition-delay: 0.1s;">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="w-14 h-14 bg-white/15 rounded-2xl flex items-center justify-center">
+                            <iconify-icon icon="lucide:truck" width="28" class="text-white"></iconify-icon>
+                        </div>
+                        <div class="text-4xl font-semibold">50+</div>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2">Reefer Trucks</h3>
+                    <p class="text-gold-100 text-sm leading-relaxed">Reliable temperature-controlled transportation across major routes throughout India.</p>
+                </div>
+            </div>
+
+            <!-- Leadership -->
+            <div class="text-center max-w-2xl mx-auto mb-12 fade-up">
+                <div class="inline-flex items-center gap-2 bg-brand-50 rounded-full px-4 py-2 mb-6">
+                    <iconify-icon icon="lucide:crown" width="16" class="text-brand-500"></iconify-icon>
+                    <span class="text-xs font-medium text-brand-600 uppercase tracking-wider">Leadership</span>
+                </div>
+                <h2 class="text-3xl md:text-4xl font-semibold text-gray-900 tracking-tight mb-4">Vision Behind TradJac</h2>
+                <div class="w-20 h-1 bg-gradient-to-r from-brand-500 to-gold-500 rounded-full mx-auto mb-6 line-draw"></div>
+                <p class="text-gray-500 leading-relaxed">The driving force behind our cold storage excellence and modern logistics infrastructure.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                <!-- Leader 1 -->
+                <div class="card-hover bg-white rounded-2xl p-8 border border-gray-100 text-center fade-up">
+                    <div class="w-20 h-20 bg-gradient-to-br from-brand-500 to-brand-700 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
+                        <span class="text-3xl font-bold text-white">B</span>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-1">Mr. Badruddin Faiyaz Valikarimwala</h3>
+                    <p class="text-gold-500 text-sm font-medium mb-4">Founder & Visionary</p>
+                    <p class="text-gray-500 text-sm leading-relaxed">A visionary leader whose dedication and foresight laid the foundation of TradJac's advanced cold storage facility. His commitment to quality, infrastructure, and long-term growth continues to drive the company forward.</p>
+                </div>
+
+                <!-- Leader 2 -->
+                <div class="card-hover bg-white rounded-2xl p-8 border border-gray-100 text-center fade-up" style="transition-delay: 0.1s;">
+                    <div class="w-20 h-20 bg-gradient-to-br from-gold-500 to-gold-700 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
+                        <span class="text-3xl font-bold text-white">Y</span>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-1">Yogesh Rathod</h3>
+                    <p class="text-gold-500 text-sm font-medium mb-4">Co-Founder & Operations Lead</p>
+                    <p class="text-gray-500 text-sm leading-relaxed">Played a key role in building and operationalizing the cold storage facility. His expertise in logistics, execution, and system-driven operations ensures efficiency, reliability, and seamless supply chain performance.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Band -->
+    <section class="hero-gradient py-20 relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-[300px] h-[300px] rounded-full opacity-10" style="background: radial-gradient(circle, #c88e1e, transparent 70%);"></div>
+        <div class="max-w-[1440px] mx-auto px-6 text-center relative z-10 fade-up">
+            <h2 class="text-3xl md:text-4xl font-semibold text-white tracking-tight mb-4">Ready to Optimize Your Supply Chain?</h2>
+            <p class="text-brand-200 text-lg max-w-xl mx-auto mb-8">Partner with TradJac for reliable cold storage, warehousing, and logistics solutions tailored to your business.</p>
+            <div class="flex flex-wrap justify-center gap-4">
+                <a href="#contact" class="inline-flex items-center gap-2 bg-gold-500 text-white font-medium px-8 py-4 rounded-xl hover:bg-gold-600 transition-all duration-200 gold-glow">
+                    Contact Us Today
+                    <iconify-icon icon="lucide:arrow-right" width="18"></iconify-icon>
+                </a>
+                <a href="tel:+919702810327" class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm text-white font-medium px-8 py-4 rounded-xl border border-white/20 hover:bg-white/20 transition-all duration-200">
+                    <iconify-icon icon="lucide:phone" width="18"></iconify-icon>
+                    Call Now
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-24 lg:py-32 bg-gray-50">
+        <div class="max-w-[1440px] mx-auto px-6">
+            <div class="text-center max-w-2xl mx-auto mb-16 fade-up">
+                <div class="inline-flex items-center gap-2 bg-brand-50 rounded-full px-4 py-2 mb-6">
+                    <iconify-icon icon="lucide:mail" width="16" class="text-brand-500"></iconify-icon>
+                    <span class="text-xs font-medium text-brand-600 uppercase tracking-wider">Get In Touch</span>
+                </div>
+                <h2 class="text-3xl md:text-4xl font-semibold text-gray-900 tracking-tight mb-4">We're Here to Help</h2>
+                <div class="w-20 h-1 bg-gradient-to-r from-brand-500 to-gold-500 rounded-full mx-auto mb-6 line-draw"></div>
+                <p class="text-gray-500 leading-relaxed">We're here to support your logistics and storage needs. Reach out to us through any channel.</p>
+            </div>
+
+            <div class="grid lg:grid-cols-5 gap-8">
+                <!-- Contact Info Cards -->
+                <div class="lg:col-span-2 space-y-4 fade-up">
+                    <!-- Phone -->
+                    <div class="bg-white rounded-2xl p-6 border border-gray-100 card-hover">
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 bg-brand-50 rounded-xl flex items-center justify-center shrink-0">
+                                <iconify-icon icon="lucide:phone" width="22" class="text-brand-500"></iconify-icon>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-semibold text-gray-900 mb-2">Phone</h4>
+                                <a href="tel:+919702810327" class="block text-sm text-gray-500 hover:text-brand-500 transition-colors">+91 97028 10327</a>
+                                <a href="tel:+918828149402" class="block text-sm text-gray-500 hover:text-brand-500 transition-colors">+91 88281 49402</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Email -->
+                    <div class="bg-white rounded-2xl p-6 border border-gray-100 card-hover">
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 bg-gold-50 rounded-xl flex items-center justify-center shrink-0">
+                                <iconify-icon icon="lucide:mail" width="22" class="text-gold-500"></iconify-icon>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-semibold text-gray-900 mb-2">Email</h4>
+                                <a href="mailto:info@tradjac.com" class="block text-sm text-gray-500 hover:text-brand-500 transition-colors">info@tradjac.com</a>
+                                <a href="mailto:sales@tradjac.com" class="block text-sm text-gray-500 hover:text-brand-500 transition-colors">sales@tradjac.com</a>
+                                <a href="mailto:services@tradjac.com" class="block text-sm text-gray-500 hover:text-brand-500 transition-colors">services@tradjac.com</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Address -->
+                    <div class="bg-white rounded-2xl p-6 border border-gray-100 card-hover">
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 bg-brand-50 rounded-xl flex items-center justify-center shrink-0">
+                                <iconify-icon icon="lucide:map-pin" width="22" class="text-brand-500"></iconify-icon>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-semibold text-gray-900 mb-2">Address</h4>
+                                <p class="text-sm text-gray-500 leading-relaxed">GRD/2 Vijaya Bhavan, CTS – 61<br>Prabhat Colony Road No.7, Santacruz (East)<br>Opp. Albert Mansion, Mumbai – 400055, India</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact Form -->
+                <div class="lg:col-span-3 bg-white rounded-2xl p-8 lg:p-10 border border-gray-100 shadow-sm fade-up" style="transition-delay: 0.1s;">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-6">Send Message</h3>
+                    <form id="contactForm" class="space-y-5">
+                        <div class="grid md:grid-cols-2 gap-5">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+                                <input type="text" name="name" required placeholder="John Doe" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all duration-200">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                                <input type="email" name="email" required placeholder="john@company.com" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all duration-200">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Company</label>
+                            <input type="text" name="company" placeholder="Your Company Name" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all duration-200">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Message</label>
+                            <textarea name="message" required rows="5" placeholder="Tell us about your requirements..." class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all duration-200 resize-none"></textarea>
+                        </div>
+                        <button type="submit" class="inline-flex items-center gap-2 bg-brand-500 text-white font-medium px-7 py-3.5 rounded-xl hover:bg-brand-600 transition-all duration-200 teal-glow w-full md:w-auto justify-center">
+                            Send Message
+                            <iconify-icon icon="lucide:send" width="16"></iconify-icon>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-brand-900 text-white">
+        <div class="max-w-[1440px] mx-auto px-6 py-16">
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-12">
+                <!-- Brand -->
+                <div class="lg:col-span-1">
+                    <div class="flex items-center gap-2 mb-4">
+                        <div class="w-10 h-10 bg-brand-500 rounded-xl flex items-center justify-center">
+                            <span class="text-white font-bold text-lg">T</span>
+                        </div>
+                        <span class="text-xl font-semibold tracking-tight">Trad<span class="text-gold-400">Jac</span></span>
+                    </div>
+                    <p class="text-brand-300 text-sm leading-relaxed mb-6">Trusted 3PL partner specializing in cold storage, warehousing, and logistics solutions. Delivering efficiency, safety, and reliability across your supply chain.</p>
+                    <div class="flex gap-3">
+                        <a href="#" class="w-10 h-10 bg-brand-800 rounded-xl flex items-center justify-center hover:bg-brand-700 transition-colors duration-200">
+                            <iconify-icon icon="lucide:linkedin" width="18" class="text-brand-300"></iconify-icon>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-brand-800 rounded-xl flex items-center justify-center hover:bg-brand-700 transition-colors duration-200">
+                            <iconify-icon icon="lucide:twitter" width="18" class="text-brand-300"></iconify-icon>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-brand-800 rounded-xl flex items-center justify-center hover:bg-brand-700 transition-colors duration-200">
+                            <iconify-icon icon="lucide:instagram" width="18" class="text-brand-300"></iconify-icon>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div>
+                    <h4 class="text-sm font-semibold uppercase tracking-wider text-brand-200 mb-6">Quick Links</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#home" class="text-sm text-brand-300 hover:text-gold-400 transition-colors duration-200">Home</a></li>
+                        <li><a href="#services" class="text-sm text-brand-300 hover:text-gold-400 transition-colors duration-200">Services</a></li>
+                        <li><a href="#about" class="text-sm text-brand-300 hover:text-gold-400 transition-colors duration-200">About</a></li>
+                        <li><a href="#contact" class="text-sm text-brand-300 hover:text-gold-400 transition-colors duration-200">Contact</a></li>
+                    </ul>
+                </div>
+
+                <!-- Services -->
+                <div>
+                    <h4 class="text-sm font-semibold uppercase tracking-wider text-brand-200 mb-6">Services</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#services" class="text-sm text-brand-300 hover:text-gold-400 transition-colors duration-200">Cold Storage</a></li>
+                        <li><a href="#services" class="text-sm text-brand-300 hover:text-gold-400 transition-colors duration-200">Warehousing</a></li>
+                        <li><a href="#services" class="text-sm text-brand-300 hover:text-gold-400 transition-colors duration-200">Reefer Transport</a></li>
+                        <li><a href="#services" class="text-sm text-brand-300 hover:text-gold-400 transition-colors duration-200">3PL Solutions</a></li>
+                    </ul>
+                </div>
+
+                <!-- Locations -->
+                <div>
+                    <h4 class="text-sm font-semibold uppercase tracking-wider text-brand-200 mb-6">Our Locations</h4>
+                    <div class="space-y-5">
+                        <div class="flex items-start gap-3">
+                            <span class="text-lg mt-0.5">❄️</span>
+                            <div>
+                                <p class="text-sm font-medium text-brand-100 mb-1">Cold Storage</p>
+                                <p class="text-xs text-brand-400 leading-relaxed">Ajiwali Village, Khopoli - Pen Road<br>Tal - Khalapur, Dist. Khopoli<br>Maharashtra - 410203</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <span class="text-lg mt-0.5">🏢</span>
+                            <div>
+                                <p class="text-sm font-medium text-brand-100 mb-1">Office</p>
+                                <p class="text-xs text-brand-400 leading-relaxed">GRD/2 Vijaya Bhavan, CTS – 61<br>Prabhat Colony Road No.7, Santacruz (East)<br>Mumbai – 400055</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Bar -->
+        <div class="border-t border-brand-800">
+            <div class="max-w-[1440px] mx-auto px-6 py-6 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-xs text-brand-400">© 2026 TradJac. All Rights Reserved.</p>
+                <div class="flex gap-6">
+                    <a href="#" class="text-xs text-brand-400 hover:text-brand-200 transition-colors">Privacy Policy</a>
+                    <a href="#" class="text-xs text-brand-400 hover:text-brand-200 transition-colors">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast fixed bottom-6 right-6 z-[70] bg-brand-500 text-white px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-3 max-w-sm">
+        <div class="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center shrink-0">
+            <iconify-icon icon="lucide:check-circle" width="18"></iconify-icon>
+        </div>
+        <div>
+            <p class="text-sm font-medium">Message Sent!</p>
+            <p class="text-xs text-brand-100">We'll get back to you shortly.</p>
+        </div>
+    </div>
+
+    <!-- Back to Top -->
+    <button id="backToTop" class="fixed bottom-6 left-6 z-50 w-12 h-12 bg-brand-500 text-white rounded-xl shadow-lg flex items-center justify-center hover:bg-brand-600 transition-all duration-200 opacity-0 translate-y-4 pointer-events-none">
+        <iconify-icon icon="lucide:arrow-up" width="20"></iconify-icon>
+    </button>
+
+    <script>
+        // Mobile Menu
+        const menuToggle = document.getElementById('menuToggle');
+        const menuClose = document.getElementById('menuClose');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const menuOverlay = document.getElementById('menuOverlay');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+
+        function openMenu() {
+            mobileMenu.classList.add('open');
+            menuOverlay.classList.remove('hidden');
+            setTimeout(() => menuOverlay.style.opacity = '1', 10);
+            document.body.style.overflow = 'hidden';
+        }
+        function closeMenu() {
+            mobileMenu.classList.remove('open');
+            menuOverlay.style.opacity = '0';
+            setTimeout(() => menuOverlay.classList.add('hidden'), 300);
+            document.body.style.overflow = '';
+        }
+
+        menuToggle.addEventListener('click', openMenu);
+        menuClose.addEventListener('click', closeMenu);
+        menuOverlay.addEventListener('click', closeMenu);
+        mobileLinks.forEach(link => link.addEventListener('click', closeMenu));
+
+        // Navbar Scroll Effect
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.style.boxShadow = '0 4px 20px rgba(0,0,0,0.08)';
+            } else {
+                navbar.style.boxShadow = 'none';
+            }
+        });
+
+        // Active Nav Link
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('.nav-link');
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - 100;
+                if (window.scrollY >= sectionTop) {
+                    current = section.getAttribute('id');
+                }
+            });
+            navLinks.forEach(link => {
+                link.classList.remove('nav-active');
+                if (link.getAttribute('href') === '#' + current) {
+                    link.classList.add('nav-active');
+                }
+            });
+        });
+
+        // Scroll Animations
+        const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -50px 0px' };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+        document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+        // Back to Top
+        const backToTop = document.getElementById('backToTop');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 600) {
+                backToTop.style.opacity = '1';
+                backToTop.style.transform = 'translateY(0)';
+                backToTop.style.pointerEvents = 'auto';
+            } else {
+                backToTop.style.opacity = '0';
+                backToTop.style.transform = 'translateY(16px)';
+                backToTop.style.pointerEvents = 'none';
+            }
+        });
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Contact Form
+        const contactForm = document.getElementById('contactForm');
+        const toast = document.getElementById('toast');
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            toast.classList.add('show');
+            contactForm.reset();
+            setTimeout(() => toast.classList.remove('show'), 4000);
+        });
+    </script>
+</body>
+</html>
