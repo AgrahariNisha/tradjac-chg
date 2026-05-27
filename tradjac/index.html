@@ -1,0 +1,1813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trad Jac</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Custom Colors -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#197d7d',
+            secondary: '#c88e1e',
+            dark: '#0a1a1a',
+          },
+          fontFamily: {
+            jakarta: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          keyframes: {
+            kbZoomIn: { '0%': { transform: 'scale(1.0)' }, '100%': { transform: 'scale(1.15)' } },
+            kbZoomOut: { '0%': { transform: 'scale(1.18)' }, '100%': { transform: 'scale(1.02)' } },
+            kbPanLR: { '0%': { transform: 'scale(1.12) translateX(-3%)' }, '100%': { transform: 'scale(1.02) translateX(2%)' } },
+            kbPanRL: { '0%': { transform: 'scale(1.12) translateX(3%)' }, '100%': { transform: 'scale(1.02) translateX(-2%)' } },
+            geoRotate: { 'from': { transform: 'rotate(0deg)' }, 'to': { transform: 'rotate(360deg)' } },
+            geoFloat: { '0%, 100%': { marginTop: '0' }, '50%': { marginTop: '-30px' } },
+            geoFloat2: { '0%, 100%': { marginTop: '0', marginLeft: '0' }, '33%': { marginTop: '-20px', marginLeft: '10px' }, '66%': { marginTop: '15px', marginLeft: '-10px' } },
+            geoFloat3: { '0%, 100%': { transform: 'rotate(0deg) translateY(0)' }, '50%': { transform: 'rotate(10deg) translateY(-25px)' } },
+            charIn: { 'to': { opacity: '1', transform: 'translateY(0) rotateX(0)' } },
+            lineSlideUp: { 'to': { transform: 'translateY(0)' } },
+            fadeInUp: { 'to': { opacity: '1', transform: 'translateY(0)' } },
+            fillBar: { 'from': { width: '0%' }, 'to': { width: '100%' } },
+            livePulse: { '0%, 100%': { opacity: '0.5', transform: 'scale(1)' }, '50%': { opacity: '0', transform: 'scale(3)' } },
+            playRingPulse: { '0%, 100%': { transform: 'scale(1)', opacity: '1' }, '50%': { transform: 'scale(1.15)', opacity: '0' } },
+            scrollPulse: { '0%, 100%': { transform: 'scaleY(1)', opacity: '1' }, '50%': { transform: 'scaleY(0.5)', opacity: '0.3' } },
+            scrollDot: { '0%': { opacity: '1', transform: 'translateX(-50%) translateY(0)' }, '100%': { opacity: '0', transform: 'translateX(-50%) translateY(12px)' } },
+            marqueeScroll: { 'from': { transform: 'translateX(0)' }, 'to': { transform: 'translateX(-50%)' } },
+            particleRise: { '0%': { transform: 'translateY(0) translateX(0)', opacity: '0' }, '10%': { opacity: '1' }, '90%': { opacity: '1' }, '100%': { transform: 'translateY(-100vh) translateX(40px)', opacity: '0' } }
+          },
+          animation: {
+            'kb-zoom-in': 'kbZoomIn 8s ease-out forwards',
+            'kb-zoom-out': 'kbZoomOut 8s ease-out forwards',
+            'kb-pan-lr': 'kbPanLR 8s ease-out forwards',
+            'kb-pan-rl': 'kbPanRL 8s ease-out forwards',
+            'geo-1': 'geoRotate 30s linear infinite, geoFloat 8s ease-in-out infinite',
+            'geo-2': 'geoRotate 25s linear infinite reverse, geoFloat2 10s ease-in-out infinite',
+            'geo-3': 'geoRotate 20s linear infinite, geoFloat3 7s ease-in-out infinite',
+            'geo-diamond': 'geoFloat2 12s ease-in-out infinite',
+            'fade-in': 'fadeInUp 0.9s cubic-bezier(0.4, 0, 0.2, 1) forwards',
+            'line-slide-up': 'lineSlideUp 1s cubic-bezier(0.22, 1, 0.36, 1) forwards',
+            'fill-bar': 'fillBar 6s linear forwards',
+            'live-pulse': 'livePulse 2s ease-in-out infinite',
+            'play-ring-pulse': 'playRingPulse 2.5s ease-in-out infinite',
+            'scroll-pulse': 'scrollPulse 2s ease-in-out infinite',
+            'scroll-dot': 'scrollDot 2s ease-in-out infinite',
+            'marquee-scroll': 'marqueeScroll 30s linear infinite',
+          }
+        }
+      }
+    }
+  </script>
+  <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <style>
+    #temperature{
+      --temp-accent:#197d7d;--temp-veil:0;--temp-fog-deep:0;
+      font-family:'Plus Jakarta Sans',system-ui,sans-serif;
+      background:#e4edf1;
+      position:relative;width:100%;max-width:100%;margin:0;
+      min-height:100svh;min-height:100dvh;
+      overflow-x:hidden;overflow-y:auto;
+      isolation:isolate;
+    }
+    .temp-bg-pin{
+      position:absolute;inset:0;z-index:0;
+      width:100%;height:100%;min-height:100%;
+      pointer-events:none;overflow:hidden;
+    }
+    .temp-bg-stage{
+      position:absolute;
+      top:-3px;right:-3px;bottom:-3px;left:-3px;
+      pointer-events:none;
+      background-color:#e8eef2;
+      background-image:url("assets/ChatGPT Image May 25, 2026, 12_07_52 PM.png");
+      background-size:cover;
+      background-position:50% 40%;
+      background-repeat:no-repeat;
+      background-attachment:scroll;
+      -webkit-background-size:cover;
+    }
+    .temp-bg-veil{
+      position:absolute;inset:0;pointer-events:none;
+      background:rgba(240,248,252,.42);
+      opacity:var(--temp-veil,0);
+      transform:none!important;transition:none!important;
+    }
+    .temp-bg-scrim{
+      position:absolute;inset:0;pointer-events:none;
+      background:
+        linear-gradient(180deg,rgba(255,255,255,.3) 0%,transparent 18%),
+        linear-gradient(0deg,rgba(255,255,255,.26) 0%,transparent 16%),
+        radial-gradient(ellipse 100% 90% at 50% 42%,transparent 48%,rgba(255,255,255,.04) 100%);
+      transform:none!important;transition:none!important;animation:none!important;
+    }
+    .temp-section-inner{
+      position:relative;z-index:10;width:100%;max-width:min(56rem,94vw);margin:0 auto;
+      padding:clamp(1.25rem,3vw,2.5rem) clamp(1rem,3vw,2rem) 0;
+      min-height:100svh;min-height:100dvh;
+      display:flex;flex-direction:column;align-items:center;
+      gap:clamp(1.5rem,3vh,2.5rem);box-sizing:border-box;
+    }
+    .temp-header{
+      text-align:center;padding-top:.25rem;flex-shrink:0;
+      position:relative;z-index:3;width:100%;
+    }
+    .temp-eyebrow{
+      font-size:.6875rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;
+      color:#197d7d;display:inline-flex;align-items:center;gap:.875rem;
+      margin:0 0 clamp(.65rem,1.5vh,1rem);
+      text-shadow:0 1px 16px rgba(255,255,255,.9);
+    }
+    .temp-eyebrow::before,.temp-eyebrow::after{
+      content:'';width:2.25rem;height:1px;
+      background:linear-gradient(90deg,transparent,rgba(25,125,125,.5));
+    }
+    .temp-eyebrow::after{background:linear-gradient(90deg,rgba(25,125,125,.5),transparent)}
+    .temp-title{
+      font-size:clamp(1.5rem,4vw,2.75rem);font-weight:800;letter-spacing:-.035em;
+      color:#0f172a;line-height:1.2;margin:0;
+      text-shadow:0 1px 24px rgba(255,255,255,.9),0 0 40px rgba(255,255,255,.6);
+    }
+    .temp-subtitle{
+      font-size:clamp(.8125rem,1.8vw,1rem);font-weight:500;color:#475569;letter-spacing:.01em;
+      line-height:1.55;margin:0;padding:0 1rem;max-width:28rem;
+      text-shadow:0 1px 16px rgba(255,255,255,.85);
+    }
+    .temp-text-shadow{text-shadow:0 2px 20px rgba(255,255,255,.95),0 0 48px rgba(255,255,255,.7)}
+    .temp-hero-center{
+      display:flex;flex-direction:column;align-items:center;justify-content:flex-start;
+      gap:clamp(1.25rem,2.5vh,2rem);flex-shrink:0;width:100%;
+      position:relative;z-index:3;
+    }
+    .temp-hero-intro{
+      flex-shrink:0;width:100%;max-width:32rem;text-align:center;
+      padding-bottom:clamp(.75rem,2vh,1.25rem);
+    }
+    .temp-display-block{
+      text-align:center;width:100%;max-width:28rem;
+      padding:clamp(.75rem,2vh,1.25rem) .75rem;
+      flex-shrink:0;min-height:clamp(8.5rem,22vh,11rem);
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      gap:clamp(.5rem,1.2vh,.75rem);
+    }
+    .temp-value{
+      font-size:clamp(2.5rem,7vw,4.5rem);font-weight:800;letter-spacing:-.04em;
+      line-height:1.1;margin:0;padding:.05em 0;
+      font-variant-numeric:tabular-nums;
+      filter:drop-shadow(0 4px 30px rgba(255,255,255,.95)) drop-shadow(0 0 60px rgba(255,255,255,.5));
+    }
+    .temp-status{
+      font-size:clamp(1rem,2.4vw,1.375rem);font-weight:700;letter-spacing:-.02em;
+      color:#0f172a;margin:0;line-height:1.3;
+      text-shadow:0 2px 24px rgba(255,255,255,.95),0 0 40px rgba(255,255,255,.65);
+    }
+    .temp-desc{
+      font-size:clamp(.8125rem,1.7vw,.9375rem);font-weight:500;color:#475569;line-height:1.65;
+      margin:0;max-width:22rem;padding:0 .5rem;
+      text-shadow:0 1px 20px rgba(255,255,255,.9);
+    }
+    .temp-slider-zone{
+      flex-shrink:0;width:100%;max-width:38rem;padding:0 .5rem;
+      margin-top:clamp(.5rem,1.5vh,1rem);
+    }
+    .temp-slider-zone-label{
+      font-size:.6875rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;
+      color:#64748b;text-align:center;margin-bottom:1.25rem;
+      text-shadow:0 1px 12px rgba(255,255,255,.8);
+    }
+    .temp-footer{
+      flex-shrink:0;
+      width:100%;max-width:100%;
+      padding:clamp(.75rem,2vh,1.5rem) clamp(1rem,3vw,2rem) clamp(1.5rem,3vh,2.5rem);
+      display:flex;flex-direction:column;gap:clamp(1.25rem,2.5vh,2rem);
+      position:relative;z-index:5;box-sizing:border-box;
+      background:transparent;
+    }
+  @media(min-width:768px){
+      .temp-footer{
+        width:100vw;max-width:100vw;
+        margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);
+      }
+    }
+    #tempRangeHeadline.temp-range-block{
+      display:block;padding:clamp(1rem,2.5vh,1.75rem) 0;
+      max-width:64rem;margin:0 auto;width:100%;flex-shrink:0;
+      background:transparent;box-shadow:none;border:none;
+    }
+    .temp-range-split{
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      gap:clamp(1.5rem,4vw,2.5rem);width:100%;
+    }
+  @media(min-width:768px){
+      .temp-range-split{
+        flex-direction:row;align-items:center;justify-content:space-between;
+        gap:clamp(2rem,5vw,4rem);
+      }
+    }
+    .temp-range-copy{text-align:center;flex:1;min-width:0;width:100%}
+  @media(min-width:768px){
+      .temp-range-copy{
+        text-align:left;max-width:18rem;padding-left:1.25rem;
+        border-left:3px solid rgba(25,125,125,.35);
+      }
+    }
+    .temp-range-tag{
+      margin:0;line-height:1.2;display:flex;flex-direction:column;
+      align-items:center;gap:.15rem;
+    }
+  @media(min-width:768px){.temp-range-tag{align-items:flex-start}}
+    .temp-range-tag-line{
+      display:block;font-weight:600;letter-spacing:-.02em;
+      text-shadow:0 2px 24px rgba(255,255,255,.95),0 0 40px rgba(255,255,255,.6);
+    }
+    .temp-range-tag-line--light{
+      font-size:clamp(1.125rem,2.8vw,1.5rem);font-weight:500;color:#64748b;
+      letter-spacing:.04em;text-transform:uppercase;margin-bottom:.35rem;
+    }
+    .temp-range-tag-line--bold{
+      font-size:clamp(1.5rem,4.2vw,2.25rem);font-weight:800;color:#0f172a;
+      letter-spacing:-.03em;line-height:1.2;
+    }
+    .temp-range-tag-line--accent{
+      font-size:clamp(1.5rem,4.2vw,2.25rem);font-weight:800;letter-spacing:-.03em;line-height:1.2;
+      background:linear-gradient(135deg,#0a3232 0%,#197d7d 60%,#2d9d8a 100%);
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+    }
+    .temp-range-stack{
+      display:flex;flex-direction:row;flex-wrap:wrap;align-items:baseline;justify-content:center;
+      gap:clamp(.5rem,2vw,1.25rem);
+      background:transparent;box-shadow:none;border:none;
+      backdrop-filter:none;border-radius:0;padding:0;
+    }
+  @media(min-width:768px){.temp-range-stack{justify-content:flex-end;gap:clamp(.75rem,2.5vw,1.75rem)}}
+    .temp-range-row{display:inline-flex;align-items:baseline;gap:.04em;line-height:.88;flex-shrink:0}
+    .temp-range-sign-cold{
+      font-size:clamp(2.25rem,5.5vw,3.75rem);font-weight:800;color:#0a4a4a;
+      letter-spacing:-.04em;margin-right:.05em;
+      text-shadow:none;
+    }
+    .temp-range-sign-warm{
+      font-size:clamp(2.25rem,5.5vw,3.75rem);font-weight:800;color:#8a6910;
+      letter-spacing:-.04em;margin-right:.05em;
+      text-shadow:none;
+    }
+    .temp-range-digit-cold{
+      font-size:clamp(3rem,10vw,6.5rem);font-weight:800;letter-spacing:-.06em;line-height:.9;
+      font-variant-numeric:tabular-nums;
+      background:linear-gradient(180deg,#051919 0%,#0f4b4b 25%,#197d7d 55%,#47b7b7 100%);
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+      filter:none;
+    }
+    .temp-range-digit-warm{
+      font-size:clamp(3rem,10vw,6.5rem);font-weight:800;letter-spacing:-.06em;line-height:.9;
+      font-variant-numeric:tabular-nums;
+      background:linear-gradient(180deg,#5c4206 0%,#9a7209 30%,#d4a017 65%,#f0d078 100%);
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+      filter:none;
+    }
+    .temp-range-unit-cold,.temp-range-unit-warm{
+      font-size:clamp(1.75rem,4.5vw,3.25rem);font-weight:700;letter-spacing:-.03em;
+      align-self:flex-end;padding-bottom:.12em;
+    }
+    .temp-range-unit-cold{color:#197d7d;text-shadow:none}
+    .temp-range-unit-warm{color:#c88e1e;text-shadow:none}
+    .temp-range-connector{
+      font-size:clamp(1rem,2.5vw,1.5rem);font-weight:500;font-style:italic;
+      letter-spacing:.1em;color:#94a3b8;align-self:center;padding:0 .15rem .35rem;
+      text-shadow:none;
+    }
+    .temp-cinema-atmosphere{
+      --temp-fog-deep:0;
+      position:absolute;inset:0;z-index:2;
+      width:100%;min-height:100%;
+      pointer-events:none;overflow:hidden;
+      transform:none!important;
+    }
+    .temp-fog-cold-wrap{
+      position:absolute;inset:0;opacity:var(--temp-fog-deep);
+      transition:none;pointer-events:none;
+    }
+    .temp-fog-layer{position:absolute;pointer-events:none}
+    .temp-volumetric-base{
+      inset:0;
+      background:
+        radial-gradient(ellipse 120% 80% at 50% 100%,rgba(224,242,254,.55) 0%,transparent 55%),
+        radial-gradient(ellipse 90% 70% at 20% 60%,rgba(186,230,253,.35) 0%,transparent 50%),
+        radial-gradient(ellipse 90% 70% at 80% 55%,rgba(207,250,254,.3) 0%,transparent 50%),
+        linear-gradient(180deg,rgba(240,249,255,.25) 0%,rgba(255,255,255,.08) 45%,rgba(224,242,254,.2) 100%);
+      animation:temp-haze-breathe 20s ease-in-out infinite;
+    }
+    .temp-chilled-haze{
+      inset:-5%;
+      background:radial-gradient(ellipse 100% 65% at 50% 55%,rgba(255,255,255,.5) 0%,rgba(186,230,253,.25) 40%,transparent 70%);
+      filter:blur(48px);
+      animation:temp-chilled-drift 28s ease-in-out infinite alternate;
+    }
+    .temp-freezer-ambient{
+      inset:0;
+      background:radial-gradient(ellipse 70% 50% at 50% 70%,rgba(147,197,253,.2) 0%,transparent 65%);
+      filter:blur(36px);
+      animation:temp-ambient-pulse 14s ease-in-out infinite alternate;
+    }
+    .temp-fog-drift-zone{position:absolute;inset:0;overflow:hidden}
+    .temp-fog-bank{
+      position:absolute;left:-25%;width:150%;border-radius:50%;filter:blur(44px);
+    }
+    .temp-fog-bank-1{
+      bottom:8%;height:42%;
+      background:radial-gradient(ellipse 55% 80% at 30% 80%,rgba(255,255,255,.88) 0%,rgba(224,242,254,.5) 35%,transparent 68%),
+                 radial-gradient(ellipse 45% 70% at 70% 75%,rgba(255,255,255,.7) 0%,transparent 65%);
+      animation:temp-ice-drift-1 32s ease-in-out infinite;
+    }
+    .temp-fog-bank-2{
+      bottom:22%;height:38%;
+      background:radial-gradient(ellipse 50% 75% at 55% 70%,rgba(255,255,255,.75) 0%,rgba(207,250,254,.4) 40%,transparent 70%);
+      animation:temp-ice-drift-2 26s ease-in-out infinite;animation-delay:-8s;
+    }
+    .temp-fog-bank-3{
+      bottom:35%;height:32%;
+      background:radial-gradient(ellipse 60% 65% at 40% 60%,rgba(255,255,255,.6) 0%,transparent 72%);
+      filter:blur(52px);
+      animation:temp-ice-drift-3 38s ease-in-out infinite;animation-delay:-14s;
+    }
+    .temp-fog-floor{
+      inset:0;top:auto;height:50%;
+      background:linear-gradient(0deg,rgba(224,242,254,.5) 0%,transparent 45%);
+      filter:blur(10px);
+    }
+    .temp-fog-floor::before,.temp-fog-floor::after{
+      content:'';position:absolute;bottom:0;width:80%;height:55%;filter:blur(36px);border-radius:50%;
+    }
+    .temp-fog-floor::before{
+      left:-10%;
+      background:radial-gradient(ellipse 70% 90% at 40% 100%,rgba(255,255,255,.85) 0%,transparent 65%);
+      animation:temp-floor-roll-l 22s ease-in-out infinite;
+    }
+    .temp-fog-floor::after{
+      right:-10%;
+      background:radial-gradient(ellipse 70% 90% at 60% 100%,rgba(255,255,255,.8) 0%,transparent 65%);
+      animation:temp-floor-roll-r 27s ease-in-out infinite;animation-delay:-11s;
+    }
+    .temp-fog-mid{
+      inset:0;
+      background:radial-gradient(ellipse 90% 55% at 50% 55%,rgba(255,255,255,.65) 0%,transparent 68%);
+      filter:blur(44px);
+      animation:temp-fog-breathe 14s ease-in-out infinite;
+    }
+    .temp-fog-rise{
+      inset:0;
+      background:
+        radial-gradient(ellipse 35% 25% at 35% 80%,rgba(255,255,255,.55) 0%,transparent 70%),
+        radial-gradient(ellipse 30% 22% at 58% 75%,rgba(255,255,255,.5) 0%,transparent 68%),
+        radial-gradient(ellipse 28% 20% at 72% 82%,rgba(255,255,255,.45) 0%,transparent 65%),
+        radial-gradient(ellipse 32% 24% at 22% 78%,rgba(255,255,255,.48) 0%,transparent 66%);
+      filter:blur(28px);
+      animation:temp-vapor-rise 12s ease-in-out infinite;
+    }
+    .temp-fog-glow{
+      inset:0;opacity:.7;
+      background:radial-gradient(ellipse 85% 55% at 50% 48%,rgba(147,197,253,.22) 0%,transparent 72%);
+      filter:blur(20px);
+      animation:temp-fog-glow-pulse 11s ease-in-out infinite alternate;
+    }
+    @keyframes temp-haze-breathe{0%,100%{opacity:.7}50%{opacity:1}}
+    @keyframes temp-chilled-drift{0%{transform:translate(-2%,1%)}100%{transform:translate(3%,-2%)}}
+    @keyframes temp-ambient-pulse{0%{opacity:.5}100%{opacity:.9}}
+    @keyframes temp-ice-drift-1{
+      0%,100%{transform:translate(-4%,1%);opacity:.55}
+      50%{transform:translate(8%,-2%);opacity:.85}
+    }
+    @keyframes temp-ice-drift-2{
+      0%,100%{transform:translate(6%,0);opacity:.5}
+      50%{transform:translate(-8%,-3%);opacity:.78}
+    }
+    @keyframes temp-ice-drift-3{
+      0%,100%{transform:translate(-8%,-1%);opacity:.4}
+      50%{transform:translate(10%,-4%);opacity:.72}
+    }
+    @keyframes temp-floor-roll-l{
+      0%,100%{transform:translateX(-4%)}
+      50%{transform:translateX(14%)}
+    }
+    @keyframes temp-floor-roll-r{
+      0%,100%{transform:translateX(5%)}
+      50%{transform:translateX(-16%)}
+    }
+    @keyframes temp-fog-breathe{
+      0%,100%{opacity:.6}50%{opacity:.85}
+    }
+    @keyframes temp-vapor-rise{
+      0%,100%{opacity:.4}50%{opacity:.85}
+    }
+    @keyframes temp-fog-glow-pulse{0%{opacity:.5}100%{opacity:.8}}
+    @media(prefers-reduced-motion:reduce){
+      .temp-volumetric-base,.temp-chilled-haze,.temp-freezer-ambient,.temp-fog-bank,
+      .temp-fog-floor::before,.temp-fog-floor::after,.temp-fog-mid,.temp-fog-rise,.temp-fog-glow{animation:none}
+    }
+    .temp-icon-btn{
+      width:2.25rem;height:2.25rem;display:flex;align-items:center;justify-content:center;
+      opacity:.85;filter:drop-shadow(0 2px 8px rgba(255,255,255,.9));
+    }
+    .temp-gradient-text{background:linear-gradient(135deg,#051919 0%,#0f4b4b 35%,#197d7d 65%,#75c9c9 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .temp-hero-gradient{background:linear-gradient(135deg,#051919 0%,#146464 40%,#197d7d 70%,#47b7b7 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .temp-range-showcase{padding:3rem 0 2rem}
+  @media(min-width:1024px){.temp-range-showcase{padding:4rem 0 2.5rem}}
+    .temp-range-numbers{
+      display:flex;flex-wrap:wrap;align-items:baseline;justify-content:center;gap:.15em .35em;
+      line-height:.9;margin:0 auto 1.5rem;max-width:100%;
+    }
+    .temp-range-numbers .temp-range-inline{display:inline-flex;align-items:baseline;gap:.02em}
+    .temp-range-sign{
+      font-size:clamp(2.5rem,8vw,5.5rem);font-weight:800;color:#0a3232;
+      letter-spacing:-.04em;line-height:1;
+    }
+    .temp-range-digit{
+      font-size:clamp(4.5rem,18vw,11rem);font-weight:800;letter-spacing:-.05em;line-height:.85;
+      font-variant-numeric:tabular-nums;
+      background:linear-gradient(165deg,#051919 0%,#0f4b4b 25%,#197d7d 55%,#47b7b7 85%,#75c9c9 100%);
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+      color:#0f4b4b;
+      filter:drop-shadow(0 2px 24px rgba(25,125,125,.2));
+    }
+    .temp-range-unit{
+      font-size:clamp(1.75rem,5vw,3.5rem);font-weight:700;color:#197d7d;
+      letter-spacing:-.02em;margin-left:.05em;align-self:flex-end;padding-bottom:.12em;
+    }
+    .temp-range-to{
+      font-size:clamp(1.25rem,3.5vw,2.25rem);font-weight:500;color:#94a3b8;
+      letter-spacing:.02em;padding:0 .25em .35em;
+    }
+    .temp-cta-row{
+      display:flex;flex-wrap:wrap;justify-content:center;gap:.875rem 1rem;
+      padding-top:.5rem;max-width:56rem;margin:0 auto;
+    }
+    .temp-btn{
+      display:inline-flex;align-items:center;gap:.5rem;font-family:inherit;
+      font-size:.8125rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+      padding:.9rem 1.75rem;border-radius:9999px;transition:all .3s ease;
+    }
+    .temp-btn-primary{
+      background:#197d7d;color:#fff;box-shadow:0 4px 20px rgba(25,125,125,.35);
+    }
+    .temp-btn-primary:hover{background:#146464;box-shadow:0 6px 28px rgba(25,125,125,.4);transform:translateY(-1px)}
+    .temp-btn-outline{
+      color:#197d7d;background:rgba(255,255,255,.75);backdrop-filter:blur(8px);
+      border:1.5px solid rgba(25,125,125,.35);
+    }
+    .temp-btn-outline:hover{border-color:#197d7d;background:#fff;transform:translateY(-1px)}
+    .temp-slider-wrap{
+      --slider-pct:40%;position:relative;height:3rem;touch-action:none;cursor:pointer;user-select:none;
+    }
+    .temp-slider-fill{
+      position:absolute;left:0;top:50%;transform:translateY(-50%);height:8px;width:var(--slider-pct);
+      border-radius:9999px;pointer-events:none;z-index:15;
+      background:linear-gradient(90deg,rgba(10,74,74,.25) 0%,rgba(25,125,125,.35) 100%);
+      transition:width .12s cubic-bezier(.25,.46,.45,.94);
+    }
+    .temp-slider-track{
+      height:8px;border-radius:9999px;
+      background:linear-gradient(90deg,#0a4a4a 0%,#197d7d 22%,#3daba0 42%,#8fbc8f 62%,#c9a227 82%,#d4a017 100%);
+      box-shadow:inset 0 1px 3px rgba(0,0,0,.08),0 1px 0 rgba(255,255,255,.5);
+      opacity:.92;
+    }
+    .temp-slider-thumb{
+      position:absolute;top:50%;left:var(--slider-pct);
+      transform:translate(-50%,-50%);width:28px;height:28px;border-radius:50%;
+      background:var(--temp-accent,#197d7d);border:3px solid #fff;pointer-events:none;z-index:25;
+      box-shadow:0 0 0 5px rgba(25,125,125,.12),0 8px 24px rgba(15,23,42,.15);
+      transition:background .4s ease,box-shadow .3s ease,transform .2s ease;
+      will-change:left,transform;
+    }
+    .temp-slider-wrap.is-dragging .temp-slider-thumb,
+    .temp-slider-wrap:hover .temp-slider-thumb{transform:translate(-50%,-50%)}
+    .temp-slider-input{
+      position:absolute;inset:0;width:100%;height:100%;margin:0;padding:0;
+      opacity:0;cursor:pointer;z-index:30;-webkit-appearance:none;appearance:none;
+    }
+    .temp-marker{
+      transition:color .25s ease;cursor:pointer;background:none;border:none;padding:.25rem .125rem;
+      font-size:.6875rem;font-weight:600;letter-spacing:.03em;color:#64748b;
+      font-variant-numeric:tabular-nums;
+      text-shadow:0 1px 10px rgba(255,255,255,.85);
+    }
+  @media(min-width:640px){.temp-marker{font-size:.8125rem}}
+    .temp-marker.active{color:#197d7d;font-weight:700}
+    .temp-display-value,.temp-value{transition:opacity .35s ease}
+    #tempDisplayValue{
+      background:linear-gradient(160deg,#051919 0%,#0f4b4b 30%,#197d7d 65%,#47b7b7 100%);
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+    }
+    .temp-display-value.updating{opacity:0}
+    .temp-leaf{position:absolute;opacity:.12;pointer-events:none;animation:temp-leaf-float 8s ease-in-out infinite}
+    @keyframes temp-leaf-float{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-12px) rotate(5deg)}}
+    .temp-line-texture{background-image:repeating-linear-gradient(90deg,transparent,transparent 8px,rgba(25,125,125,.04) 8px,rgba(25,125,125,.04) 9px)}
+    .temp-fade-up{opacity:1;transform:translateY(0);transition:all .8s cubic-bezier(.4,0,.2,1)}
+    .temp-fade-up.temp-animate{opacity:0;transform:translateY(24px)}
+    .temp-fade-up.temp-animate.visible{opacity:1;transform:translateY(0)}
+    .temp-markers-row{
+      display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem .35rem;
+      width:100%;max-width:100%;
+    }
+    @media(max-width:767px){
+      #temperature{
+        min-height:auto;
+        -webkit-overflow-scrolling:touch;
+      }
+      .temp-section-inner{
+        max-width:100%;
+        min-height:auto;
+        padding:1rem 1rem 1.25rem;
+        padding-bottom:calc(1.25rem + env(safe-area-inset-bottom,0px));
+        gap:1.25rem;
+      }
+      .temp-header{padding-top:0}
+      .temp-eyebrow{
+        font-size:.625rem;gap:.5rem;letter-spacing:.16em;
+        flex-wrap:wrap;justify-content:center;
+      }
+      .temp-eyebrow::before,.temp-eyebrow::after{width:1.25rem}
+      .temp-title{
+        font-size:clamp(1.25rem,5.5vw,1.75rem);
+        padding:0 .25rem;line-height:1.25;
+      }
+      .temp-subtitle{font-size:.8125rem;padding:0 .5rem}
+      .temp-hero-center{gap:1rem}
+      .temp-display-block{
+        min-height:7rem;padding:.5rem .25rem;
+        max-width:100%;
+      }
+      .temp-value{font-size:clamp(2rem,12vw,2.75rem)}
+      .temp-status{font-size:1rem}
+      .temp-desc{font-size:.8125rem;max-width:18rem}
+      .temp-slider-zone{
+        max-width:100%;padding:0;
+        margin-top:.25rem;
+      }
+      .temp-slider-zone-label{margin-bottom:.875rem}
+      .temp-slider-wrap{
+        height:3.25rem;touch-action:pan-x;
+        -webkit-tap-highlight-color:transparent;
+      }
+      .temp-slider-thumb{
+        width:36px;height:36px;
+        box-shadow:0 0 0 6px rgba(25,125,125,.14),0 6px 20px rgba(15,23,42,.18);
+      }
+      .temp-slider-input{min-height:44px}
+      .temp-markers-row{
+        grid-template-columns:repeat(3,1fr);
+        gap:.625rem .25rem;
+      }
+      .temp-marker{
+        font-size:.6875rem;
+        min-height:44px;
+        min-width:44px;
+        display:inline-flex;
+        align-items:center;
+        justify-content:center;
+        padding:.5rem .2rem;
+        margin:0 auto;
+      }
+      .temp-footer{
+        width:100%;max-width:100%;
+        margin-left:0;margin-right:0;
+        padding:1rem 1rem 1.5rem;
+        padding-bottom:calc(1.5rem + env(safe-area-inset-bottom,0px));
+        gap:1.25rem;
+      }
+      .temp-range-split{gap:1.25rem}
+      .temp-range-copy{max-width:100%;padding:0}
+      .temp-range-tag-line--light{font-size:1rem}
+      .temp-range-tag-line--bold,
+      .temp-range-tag-line--accent{font-size:clamp(1.25rem,5vw,1.5rem)}
+      .temp-range-stack{
+        flex-direction:column;
+        align-items:center;
+        gap:.25rem;
+        width:100%;
+      }
+      .temp-range-row{justify-content:center}
+      .temp-range-sign-cold,.temp-range-sign-warm{font-size:clamp(1.75rem,8vw,2.5rem)}
+      .temp-range-digit-cold,.temp-range-digit-warm{font-size:clamp(2.25rem,14vw,3.5rem)}
+      .temp-range-unit-cold,.temp-range-unit-warm{font-size:clamp(1.25rem,5vw,1.75rem)}
+      .temp-range-connector{font-size:.9375rem;padding:.2rem 0}
+      .temp-cta-row{
+        flex-direction:column;
+        align-items:stretch;
+        width:100%;
+        gap:.75rem;
+        padding-top:.25rem;
+      }
+      .temp-btn{
+        width:100%;
+        justify-content:center;
+        min-height:48px;
+        padding:1rem 1.5rem;
+        font-size:.75rem;
+      }
+      .temp-bg-pin{
+        inset:0;width:100%;height:100%;min-height:100%;
+      }
+      .temp-bg-stage{
+        top:-6px;right:-6px;bottom:-6px;left:-6px;
+        background-size:cover;
+        background-position:50% 36%;
+        background-attachment:scroll;
+        transform:translateZ(0);
+      }
+      .temp-bg-scrim{
+        background:
+          linear-gradient(180deg,rgba(255,255,255,.2) 0%,transparent 14%),
+          linear-gradient(0deg,rgba(255,255,255,.16) 0%,transparent 12%),
+          radial-gradient(ellipse 130% 85% at 50% 40%,transparent 52%,rgba(255,255,255,.03) 100%);
+      }
+      #temperature{background-color:#e8eef2}
+    }
+    @media(max-width:767px) and (orientation:landscape){
+      .temp-bg-stage{background-position:50% 45%;background-size:cover}
+    }
+    @media(max-width:380px){
+      .temp-markers-row{grid-template-columns:repeat(2,1fr)}
+      .temp-marker{font-size:.625rem}
+      .temp-eyebrow::before,.temp-eyebrow::after{display:none}
+      .temp-bg-stage{background-position:50% 32%}
+    }
+
+    /* ── Location Advantage (interactive map) ── */
+    #location-advantage{
+      --loc-blue:#0B5ED7;--loc-teal:#197d7d;--loc-navy:#082A5E;
+      --loc-bg:#F8FAFC;--loc-border:#E5E7EB;
+      font-family:'Manrope',system-ui,sans-serif;
+      background:var(--loc-bg);color:var(--loc-navy);
+    }
+    .loc-wrap{max-width:76rem;margin:0 auto;padding:clamp(2rem,5vw,3.5rem) clamp(1.25rem,4vw,2rem)}
+    .loc-map-header{
+      display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;
+      gap:.75rem 1.25rem;margin-bottom:1rem;
+    }
+    .loc-map-header h2{
+      font-size:clamp(1.125rem,2.5vw,1.375rem);font-weight:800;margin:0;
+      letter-spacing:-.02em;color:var(--loc-navy);
+    }
+    .loc-map-hint{
+      font-size:.8125rem;color:#64748b;margin:0;
+      display:flex;align-items:center;gap:.4rem;
+    }
+    .loc-map-panel{
+      border-radius:1.25rem;background:#fff;border:1px solid var(--loc-border);
+      box-shadow:0 20px 50px rgba(8,42,94,.09);overflow:hidden;
+    }
+    #locMap{
+      width:100%;height:clamp(360px,52vh,500px);
+      z-index:1;background:linear-gradient(180deg,#eef4f8,#e8eef2);
+    }
+    #locMap .leaflet-container{font-family:'Manrope',system-ui,sans-serif}
+    #locMap .leaflet-control-zoom a{
+      width:36px;height:36px;line-height:36px;font-size:18px;
+      color:var(--loc-navy);border:1px solid var(--loc-border)!important;
+      background:#fff!important;box-shadow:0 2px 8px rgba(8,42,94,.08);
+    }
+    #locMap .leaflet-control-zoom{border:none;box-shadow:none}
+    #locMap .leaflet-control-attribution{
+      font-size:10px;background:rgba(255,255,255,.85)!important;
+      border-radius:6px 0 0 0;padding:2px 6px;
+    }
+    .loc-map-pin{background:transparent;border:none}
+    .loc-map-pin span{
+      display:block;width:16px;height:16px;border-radius:50% 50% 50% 0;
+      transform:rotate(-45deg);background:var(--loc-blue);
+      border:2.5px solid #fff;box-shadow:0 4px 12px rgba(11,94,215,.4);
+      transition:transform .2s ease;
+    }
+    .loc-map-pin--hub span{
+      width:26px;height:26px;background:var(--loc-teal);
+      box-shadow:0 0 0 8px rgba(25,125,125,.2),0 8px 20px rgba(8,42,94,.25);
+    }
+    .loc-map-pin--active span{transform:rotate(-45deg) scale(1.15)}
+    .loc-map-popup strong{display:block;font-size:.875rem;color:var(--loc-navy)}
+    .loc-map-popup small{display:block;font-size:.75rem;color:#64748b;margin-top:.15rem}
+    .loc-dist-panel{
+      border-top:1px solid var(--loc-border);
+      padding:clamp(1.25rem,3vw,1.75rem);
+      background:linear-gradient(180deg,#fff 0%,#f8fafc 100%);
+      transition:opacity .3s ease;
+    }
+    .loc-dist-panel.is-empty .loc-dist-grid{opacity:.45}
+    .loc-dist-head{
+      display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;
+      gap:.5rem 1rem;margin-bottom:1.25rem;
+    }
+    .loc-dist-title{font-size:1.0625rem;font-weight:800;margin:0;color:var(--loc-navy)}
+    .loc-dist-sub{font-size:.8125rem;color:#64748b;margin:0}
+    .loc-dist-grid{
+      display:grid;grid-template-columns:1fr;gap:.875rem;
+    }
+    @media(min-width:640px){.loc-dist-grid{grid-template-columns:repeat(3,1fr)}}
+    .loc-dist-card{
+      display:flex;align-items:flex-start;gap:.875rem;
+      padding:1rem 1.125rem;background:#fff;
+      border:1px solid var(--loc-border);border-radius:1rem;
+      box-shadow:0 4px 16px rgba(8,42,94,.05);
+    }
+    .loc-dist-icon{
+      flex-shrink:0;width:2.75rem;height:2.75rem;border-radius:.75rem;
+      display:flex;align-items:center;justify-content:center;
+      background:linear-gradient(135deg,rgba(11,94,215,.1),rgba(25,125,125,.08));
+      color:var(--loc-teal);
+    }
+    .loc-dist-card--plane .loc-dist-icon{color:var(--loc-blue);background:rgba(11,94,215,.1)}
+    .loc-dist-card--port .loc-dist-icon{color:#0ea5e9;background:rgba(14,165,233,.1)}
+    .loc-dist-card--car .loc-dist-icon{color:var(--loc-teal)}
+    .loc-dist-label{
+      display:block;font-size:.6875rem;font-weight:700;
+      letter-spacing:.08em;text-transform:uppercase;color:#64748b;margin-bottom:.25rem;
+    }
+    .loc-dist-value{
+      display:block;font-size:1.25rem;font-weight:800;color:var(--loc-navy);
+      line-height:1.2;font-variant-numeric:tabular-nums;
+    }
+    .loc-dist-meta{font-size:.75rem;color:#64748b;margin:.2rem 0 0}
+    .loc-dist-loading .loc-dist-value{color:#94a3b8;font-size:1rem}
+    @media(max-width:767px){#locMap{height:min(70vw,380px)}}
+  </style>
+
+</head>
+
+<body class="bg-white text-gray-800">
+
+  <!-- NAVBAR -->
+<header class="sticky top-0 bg-white shadow-sm border-b z-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between relative">
+
+    <!-- LOGO -->
+    <div class="flex items-center gap-3">
+      <a href="index.html">
+        <img src="assets/Tradjac Logo.jpeg" class="h-14 sm:h-16 md:h-20 lg:h-24 w-auto object-contain" alt="TradJac Logo" />
+      </a>
+    </div>
+
+    <!-- DESKTOP MENU -->
+    <ul class="hidden lg:flex gap-8 xl:gap-10 font-semibold text-base items-center">
+      <li><a href="index.html" class="hover:text-primary font-bold text-primary py-2">Home</a></li>
+      <li><a href="services.html" class="hover:text-primary py-2">Services</a></li>
+      <li><a href="about.html" class="hover:text-primary py-2">About</a></li>
+      <li><a href="brandportfolio.html" class="hover:text-primary py-2">Brand Portfolio</a></li>
+      <li><a href="contact.html" class="hover:text-primary py-2">Contact</a></li>
+    </ul>
+
+    <!-- DESKTOP CTA -->
+    <a href="contact.html" class="hidden lg:block bg-primary text-white px-6 py-3 rounded-full font-bold hover:bg-teal-700 transition-all duration-300">
+      Get Started
+    </a>
+
+    <!-- MOBILE HAMBURGER -->
+    <button id="mobile-toggle" class="lg:hidden p-2 rounded-lg hover:bg-gray-100 transition-all duration-200">
+      <span class="sr-only">Menu</span>
+      <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+      </svg>
+    </button>
+
+    <!-- MOBILE MENU -->
+    <div id="mobile-menu" class="lg:hidden hidden absolute top-full left-0 w-full bg-white shadow-2xl border-t border-gray-200 z-50 px-4 sm:px-6 py-6">
+      <ul class="space-y-3 text-base sm:text-lg font-semibold">
+        <li><a href="index.html" class="block py-3 px-4 hover:bg-primary/10 rounded-xl text-primary font-bold">Home</a></li>
+        <li><a href="services.html" class="block py-3 px-4 hover:bg-primary/10 rounded-xl">Services</a></li>
+        <li><a href="about.html" class="block py-3 px-4 hover:bg-primary/10 rounded-xl">About</a></li>
+        <li><a href="brandportfolio.html" class="block py-3 px-4 hover:bg-primary/10 rounded-xl">Brand Portfolio</a></li>
+        <li><a href="contact.html" class="block py-3 px-4 hover:bg-primary/10 rounded-xl">Contact</a></li>
+      </ul>
+
+      <a href="contact.html" class="block w-full mt-6 bg-gradient-to-r from-primary to-teal-600 text-white py-4 px-6 rounded-2xl font-bold text-center text-base sm:text-lg hover:shadow-xl transition-all duration-300">
+        Get Started
+      </a>
+    </div>
+  </div>
+</header>
+
+  <!-- HERO -->
+<section class="relative min-h-screen overflow-hidden bg-[#0a1a1a] text-white font-['Plus_Jakarta_Sans']" id="hero">
+
+  <!-- VIDEO BACKGROUND -->
+  <div class="absolute inset-0 z-0 bg-black">
+
+    <video 
+      class="w-full h-full object-contain md:object-cover"
+      autoplay
+      muted
+      loop
+      playsinline
+    >
+      <source src="assets/WhatsApp Video 2026-05-06 at 22.25.47.mp4" type="video/mp4">
+    </video>
+
+  </div>
+
+  <!-- DARK OVERLAY -->
+  <div class="absolute inset-0 bg-black/50 z-[1]"></div>
+
+  <!-- CONTENT -->
+  <div class="relative z-10 min-h-screen flex items-center">
+
+    <div class="max-w-7xl mx-auto px-6 w-full">
+
+      <div class="max-w-3xl">
+
+        <!-- Badge -->
+        <div class="inline-flex items-center gap-3 bg-black/40 backdrop-blur-xl border border-white/10 rounded-full px-5 py-2.5 mb-8">
+          <span class="w-2 h-2 bg-[#197d7d] rounded-full"></span>
+          <span class="text-[10px] uppercase tracking-[0.25em] font-semibold text-white/60">
+            Welcome to TradJac
+          </span>
+        </div>
+
+        <!-- Heading -->
+        <h1 class="text-5xl md:text-6xl lg:text-7xl font-extrabold leading-tight mb-6">
+          Advanced Cold
+          <span class="block bg-gradient-to-r from-[#197d7d] to-[#c88e1e] bg-clip-text text-transparent">
+            Storage Solutions
+          </span>
+          With Precise Control
+        </h1>
+
+        <!-- Buttons -->
+        <div class="flex flex-wrap gap-4 mt-10">
+
+          <a href="services.html"
+            class="bg-gradient-to-br from-[#c88e1e] to-[#a0700f]
+            hover:scale-105 transition-all duration-300
+            text-white px-8 py-4 rounded-2xl font-semibold">
+            Explore Facilities
+          </a>
+
+          <a href="contact.html"
+            class="bg-[#197d7d]/20 border border-[#197d7d]/40
+            backdrop-blur-md hover:bg-[#197d7d]/30
+            transition-all duration-300
+            text-white px-8 py-4 rounded-2xl font-semibold">
+            Contact Us
+          </a>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+  <!-- SERVICES -->
+  <section class="py-20">
+    <div class="max-w-6xl mx-auto px-4 text-center">
+
+      <h2 class="text-3xl font-bold text-primary mb-4">Our Services</h2>
+      <p class="text-gray-600 mb-10">
+        We provide smart logistics and storage solutions for your business growth.
+      </p>
+
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+
+        <div class="group">
+          <div class="overflow-hidden rounded-xl shadow-lg">
+            <img src="assets/Pictures (1)_page-0004.jpg" class="w-full h-80 object-cover group-hover:scale-105 transition duration-300" alt="Multi-temperature zones" />
+          </div>
+          <p class="mt-3 font-semibold text-primary">
+            Multi-temperature zones (-25°C to +25°C)
+          </p>
+        </div>
+
+        <div class="group">
+          <div class="overflow-hidden rounded-xl shadow-lg">
+            <img src="assets/Pictures (1)_page-0003.jpg" class="w-full h-80 object-cover group-hover:scale-105 transition duration-300" alt="Reefer Transportation" />
+          </div>
+          <p class="mt-3 font-semibold text-primary">
+            Reefer Transportation 🚛
+          </p>
+        </div>
+
+        <div class="group">
+          <div class="overflow-hidden rounded-xl shadow-lg">
+            <img src="assets/Pictures (1)_page-0001.jpg" class="w-full h-80 object-cover group-hover:scale-105 transition duration-300" alt="Business Solutions" />
+          </div>
+          <p class="mt-3 font-semibold text-primary">
+            End-to-end Business Solutions
+          </p>
+        </div>
+
+        <div class="group">
+          <div class="overflow-hidden rounded-xl shadow-lg">
+            <img src="assets/Pictures (1)_page-0002.jpg" class="w-full h-80 object-cover group-hover:scale-105 transition duration-300" alt="Dry Storage Solutions" />
+          </div>
+          <p class="mt-3 font-semibold text-primary">
+            Flexible Dry Storage Solutions
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="bg-teal-50 py-20">
+    <div class="max-w-6xl mx-auto px-4 grid md:grid-cols-2 gap-8">
+
+      <div class="bg-white p-8 rounded-xl shadow border">
+        <h2 class="text-2xl font-bold text-primary mb-3">About TradJac</h2>
+        <p class="text-gray-600 leading-relaxed">
+          TradJac is a trusted 3PL logistics partner delivering advanced warehousing, cold chain, and supply chain solutions.
+          We specialize in handling temperature-sensitive and dry goods with precision, ensuring product integrity, safety, and efficiency
+          at every stage — from storage to final delivery.
+        </p>
+
+        <p class="text-gray-600 mt-4 leading-relaxed">
+          With strategically located facilities, modern infrastructure, and technology-driven operations,
+          we empower businesses to scale faster, reduce costs, and maintain consistent quality across their supply chain.
+        </p>
+      </div>
+
+      <div class="bg-white p-8 rounded-xl shadow border">
+        <h2 class="text-2xl font-bold text-primary mb-3">Our Highlights</h2>
+
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mt-4 text-center">
+          <div class="bg-teal-50 p-4 rounded">
+            <h3 class="text-secondary text-xl font-bold">-25°C to +25°C</h3>
+            <p class="text-sm">Multi Temp Zones</p>
+          </div>
+
+          <div class="bg-teal-50 p-4 rounded">
+            <h3 class="text-secondary text-xl font-bold">24/7</h3>
+            <p class="text-sm">Monitoring & Support</p>
+          </div>
+
+          <div class="bg-teal-50 p-4 rounded">
+            <h3 class="text-secondary text-xl font-bold">100%</h3>
+            <p class="text-sm">Cold Chain Integrity</p>
+          </div>
+
+          <div class="bg-teal-50 p-4 rounded">
+            <h3 class="text-secondary text-xl font-bold">Pan India</h3>
+            <p class="text-sm">Reefer Transport</p>
+          </div>
+
+          <div class="bg-teal-50 p-4 rounded">
+            <h3 class="text-secondary text-xl font-bold">WMS</h3>
+            <p class="text-sm">Real-Time Tracking</p>
+          </div>
+
+          <div class="bg-teal-50 p-4 rounded">
+            <h3 class="text-secondary text-xl font-bold">FSSAI</h3>
+            <p class="text-sm">Certified Facilities</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="max-w-6xl mx-auto px-4 mt-16">
+      <h2 class="text-3xl font-bold text-center text-primary mb-10">
+        Our Core Services
+      </h2>
+
+      <div class="grid md:grid-cols-3 gap-8">
+
+        <div class="bg-white p-6 rounded-xl shadow border">
+          <h3 class="text-xl font-bold text-primary mb-3">
+            Temperature Controlled Warehousing
+          </h3>
+          <p class="text-gray-600 text-sm leading-relaxed">
+            Advanced cold storage with multi-temperature zones (-25°C to +25°C),
+            real-time monitoring, pre-cooling areas, and 100% power backup.
+            Designed for perishables like fruits, dairy, seafood, and pharmaceuticals.
+          </p>
+        </div>
+
+        <div class="bg-white p-6 rounded-xl shadow border">
+          <h3 class="text-xl font-bold text-primary mb-3">
+            Dry & Ambient Warehousing
+          </h3>
+          <p class="text-gray-600 text-sm leading-relaxed">
+            Flexible storage solutions with high-capacity racking, WMS tracking,
+            humidity control, and secure infrastructure. Ideal for FMCG, retail,
+            e-commerce, and industrial goods.
+          </p>
+        </div>
+
+        <div class="bg-white p-6 rounded-xl shadow border">
+          <h3 class="text-xl font-bold text-primary mb-3">
+            Value Added Services
+          </h3>
+          <p class="text-gray-600 text-sm leading-relaxed">
+            End-to-end support including blast freezing, packing, sorting, labeling,
+            order fulfillment, and reverse logistics — helping you reduce costs and
+            improve delivery speed.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Cold Storage Temperature Section -->
+  <section id="temperature" class="relative overflow-hidden">
+    <div class="temp-bg-pin" aria-hidden="true">
+      <div class="temp-bg-stage" role="img" aria-label="TradJac cold storage warehouse"></div>
+      <div class="temp-bg-veil"></div>
+      <div class="temp-bg-scrim"></div>
+    </div>
+    <div class="temp-cinema-atmosphere" id="tempCinemaFog" aria-hidden="true">
+      <div class="temp-fog-cold-wrap">
+        <div class="temp-fog-layer temp-volumetric-base"></div>
+        <div class="temp-fog-layer temp-chilled-haze"></div>
+        <div class="temp-fog-layer temp-freezer-ambient"></div>
+        <div class="temp-fog-drift-zone">
+          <div class="temp-fog-bank temp-fog-bank-1"></div>
+          <div class="temp-fog-bank temp-fog-bank-2"></div>
+          <div class="temp-fog-bank temp-fog-bank-3"></div>
+        </div>
+        <div class="temp-fog-layer temp-fog-floor"></div>
+        <div class="temp-fog-layer temp-fog-mid"></div>
+        <div class="temp-fog-layer temp-fog-rise"></div>
+        <div class="temp-fog-layer temp-fog-glow"></div>
+      </div>
+    </div>
+
+    <div class="temp-section-inner">
+
+      <header class="temp-header temp-fade-up temp-animate">
+        <p class="temp-eyebrow">Precision Controlled Storage</p>
+        <h2 class="temp-title">Explore Our Temperature Range</h2>
+      </header>
+
+      <div class="temp-hero-center temp-fade-up temp-animate">
+        <div class="temp-hero-intro">
+          <p class="temp-subtitle">Slide to explore different storage conditions</p>
+        </div>
+        <div class="temp-display-block">
+          <div id="tempDisplayValue" class="temp-value temp-display-value">0°C</div>
+          <h3 id="tempDisplayTitle" class="temp-status temp-display-value">Chilled Storage</h3>
+          <p id="tempDisplayDesc" class="temp-desc temp-display-value">Perfect for fresh fruits, vegetables and dairy</p>
+        </div>
+
+        <div class="temp-slider-zone">
+          <p class="temp-slider-zone-label">Adjust temperature</p>
+          <div class="flex items-center justify-between mb-3">
+            <div class="temp-icon-btn" aria-hidden="true"><iconify-icon icon="lucide:snowflake" width="20" class="text-[#197d7d]"></iconify-icon></div>
+            <div class="temp-icon-btn" aria-hidden="true"><iconify-icon icon="lucide:sun" width="20" class="text-[#d4a017]"></iconify-icon></div>
+          </div>
+          <div class="temp-slider-wrap mb-6" id="tempSliderWrap">
+            <div class="temp-slider-track absolute inset-x-0 top-1/2 -translate-y-1/2 pointer-events-none"></div>
+            <div class="temp-slider-fill" aria-hidden="true"></div>
+            <div class="temp-slider-thumb" id="tempSliderThumb" aria-hidden="true"></div>
+            <input type="range" id="tempSlider" class="temp-slider-input" min="0" max="100" value="40" step="0.01" aria-label="Temperature range selector" aria-valuemin="-25" aria-valuemax="25">
+          </div>
+          <div class="temp-markers-row">
+            <button type="button" data-index="0" class="temp-marker">−25°</button>
+            <button type="button" data-index="1" class="temp-marker">−15°</button>
+            <button type="button" data-index="2" class="temp-marker active">0°</button>
+            <button type="button" data-index="3" class="temp-marker">+5°</button>
+            <button type="button" data-index="4" class="temp-marker">+15°</button>
+            <button type="button" data-index="5" class="temp-marker">+25°</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="temp-footer temp-fade-up temp-animate">
+        <div id="tempRangeHeadline" class="temp-range-block">
+          <div class="temp-range-split">
+            <div class="temp-range-copy">
+              <p class="temp-range-tag">
+                <span class="temp-range-tag-line temp-range-tag-line--light">Engineered for</span>
+                <span class="temp-range-tag-line temp-range-tag-line--accent">Every Storage</span>
+                <span class="temp-range-tag-line temp-range-tag-line--bold">Condition</span>
+              </p>
+            </div>
+            <div class="temp-range-stack" aria-label="Temperature range -25 to +25 Celsius">
+              <div class="temp-range-row">
+                <span class="temp-range-sign-cold">−</span>
+                <span id="tempCountNeg" class="temp-range-digit-cold">1</span>
+                <span class="temp-range-unit-cold">°C</span>
+              </div>
+              <span class="temp-range-connector">to</span>
+              <div class="temp-range-row">
+                <span class="temp-range-sign-warm">+</span>
+                <span id="tempCountPos" class="temp-range-digit-warm">1</span>
+                <span class="temp-range-unit-warm">°C</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="temp-cta-row">
+          <a href="contact.html" class="temp-btn temp-btn-primary">
+            Contact Us
+            <iconify-icon icon="lucide:arrow-right" width="16"></iconify-icon>
+          </a>
+          <a href="tel:+919702810327" class="temp-btn temp-btn-outline">
+            <iconify-icon icon="lucide:phone" width="16"></iconify-icon>
+            Call Now
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Location Advantage -->
+  <section id="location-advantage" aria-label="TradJac facility location map">
+    <div class="loc-wrap">
+      <div class="loc-map-header">
+        <h2>Strategic Connectivity</h2>
+        <p class="loc-map-hint">
+          <iconify-icon icon="lucide:mouse-pointer-click" width="16"></iconify-icon>
+          Click <strong>JNPT</strong> or <strong>Navi Mumbai</strong> for distances
+        </p>
+      </div>
+      <div class="loc-map-panel">
+        <div id="locMap" role="application" aria-label="Interactive map: TradJac Khopoli, JNPT Port, Navi Mumbai"></div>
+        <div id="locDistancePanel" class="loc-dist-panel is-empty" aria-live="polite">
+          <div class="loc-dist-head">
+            <div>
+              <h3 id="locDistTitle" class="loc-dist-title">Select a destination on the map</h3>
+              <p id="locDistSub" class="loc-dist-sub">Distances from TradJac Facility (Khopoli)</p>
+            </div>
+          </div>
+          <div class="loc-dist-grid">
+            <div class="loc-dist-card loc-dist-card--plane" id="locDistPlaneCard">
+              <div class="loc-dist-icon" aria-hidden="true"><iconify-icon icon="lucide:plane" width="22"></iconify-icon></div>
+              <div>
+                <span class="loc-dist-label">By Air</span>
+                <span id="locDistPlane" class="loc-dist-value">—</span>
+                <span id="locDistPlaneMeta" class="loc-dist-meta">Straight-line distance</span>
+              </div>
+            </div>
+            <div class="loc-dist-card loc-dist-card--port" id="locDistPortCard">
+              <div class="loc-dist-icon" aria-hidden="true"><iconify-icon icon="lucide:ship" width="22"></iconify-icon></div>
+              <div>
+                <span class="loc-dist-label">By Port</span>
+                <span id="locDistPort" class="loc-dist-value">—</span>
+                <span id="locDistPortMeta" class="loc-dist-meta">Road distance to JNPT</span>
+              </div>
+            </div>
+            <div class="loc-dist-card loc-dist-card--car" id="locDistCarCard">
+              <div class="loc-dist-icon" aria-hidden="true"><iconify-icon icon="lucide:car" width="22"></iconify-icon></div>
+              <div>
+                <span class="loc-dist-label">By Car</span>
+                <span id="locDistCar" class="loc-dist-value">—</span>
+                <span id="locDistCarMeta" class="loc-dist-meta">Driving route</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+<footer class="bg-teal-900 text-white pt-12 pb-6 -mt-px">
+  <div class="max-w-6xl mx-auto px-6 grid md:grid-cols-3 gap-10">
+
+    <!-- COMPANY -->
+    <div>
+      <h2 class="text-xl font-bold mb-4">TradJac</h2>
+      <p class="text-sm text-gray-300 leading-relaxed">
+        Trusted 3PL partner specializing in cold storage, warehousing, and logistics solutions.
+        Delivering efficiency, safety, and reliability across your supply chain.
+      </p>
+    </div>
+
+    <!-- LINKS -->
+    <div>
+      <h2 class="text-xl font-bold mb-4">Quick Links</h2>
+      <ul class="space-y-2 text-gray-300 text-sm">
+        <li><a href="index.html" class="hover:text-white">Home</a></li>
+        <li><a href="services.html" class="hover:text-white">Services</a></li>
+        <li><a href="about.html" class="hover:text-white">About</a></li>
+        <li><a href="contact.html" class="hover:text-white">Contact</a></li>
+      </ul>
+    </div>
+
+    <!-- LOCATION -->
+    <div>
+      <h2 class="text-xl font-bold mb-4">Our Locations</h2>
+
+      <!-- Cold Storage -->
+      <p class="text-sm text-gray-300 leading-relaxed mb-4">
+        ❄️ <span class="font-semibold text-white">Cold Storage:</span><br>
+        Ajiwali Village, Khopoli - Pen Road<br>
+        Tal - Khalapur, Dist. Khopoli<br>
+        Maharashtra - 410203
+      </p>
+
+      <!-- Office -->
+      <p class="text-sm text-gray-300 leading-relaxed">
+        🏢 <span class="font-semibold text-white">Office:</span><br>
+        GRD/2 Vijaya Bhavan, CTS – 61<br>
+        Prabhat Colony Road No.7, Santacruz (East)<br>
+        Opp. Albert Mansion, Mumbai – 400056, India
+      </p>
+    </div>
+
+  </div>
+
+  <!-- COPYRIGHT -->
+  <div class="border-t border-teal-700 mt-8 pt-4 text-center text-sm text-gray-400">
+    © 2026 TradJac. All Rights Reserved.
+  </div>
+</footer>
+<script>
+  // ── SLIDESHOW (only if elements exist) ──
+  const slides = document.querySelectorAll('.slide-layer');
+  const dots = document.querySelectorAll('.sdot');
+  const progressBar = document.getElementById('progressBar');
+  const curNum = document.getElementById('curNum');
+  const totNum = document.getElementById('totNum');
+  const INTERVAL = 6000;
+  let cur = 0, timer = null;
+
+  if (totNum && slides.length) totNum.textContent = String(slides.length).padStart(2, '0');
+
+  function updateDotUI(dot, isActive) {
+    if(isActive) {
+      dot.className = 'w-8 h-2 rounded-full bg-gradient-to-r from-[#084B9B] to-white shadow-[0_0_12px_rgba(25,125,125,0.4)] cursor-pointer transition-all duration-500 sdot';
+    } else {
+      dot.className = 'w-2 h-2 rounded-full bg-white/20 cursor-pointer transition-all duration-500 sdot';
+    }
+  }
+
+  function go(i) {
+    slides[cur].classList.remove('opacity-100', 'z-10');
+    updateDotUI(dots[cur], false);
+    
+    const vids = slides[cur].querySelectorAll('video');
+    vids.forEach(v => v.pause());
+
+    cur = i;
+    slides[cur].classList.add('opacity-100', 'z-10');
+    updateDotUI(dots[cur], true);
+    curNum.textContent = String(cur + 1).padStart(2, '0');
+
+    const activeVids = slides[cur].querySelectorAll('video');
+    activeVids.forEach(v => { v.currentTime = 0; v.play().catch(() => {}); });
+
+    restartProgress();
+  }
+
+  function next() { go((cur + 1) % slides.length); }
+
+  function restartProgress() {
+    progressBar.classList.remove('animate-fill-bar');
+    void progressBar.offsetWidth; 
+    progressBar.classList.add('animate-fill-bar');
+  }
+
+  function startAuto() {
+    clearInterval(timer);
+    timer = setInterval(next, INTERVAL);
+  }
+
+  if (slides.length && dots.length && progressBar && curNum) {
+    dots.forEach((d, idx) => {
+      d.addEventListener('click', () => {
+        if (idx !== cur) { go(idx); startAuto(); }
+      });
+    });
+    const firstVids = slides[0].querySelectorAll('video');
+    firstVids.forEach(v => v.play().catch(() => {}));
+    startAuto();
+    restartProgress();
+  }
+
+  // ── VIDEO CARD PLAY/PAUSE ──
+  const heroVideo = document.getElementById('heroVideo');
+  const playBtn = document.getElementById('playBtn');
+  if (heroVideo && playBtn) {
+    let isPlaying = false;
+    playBtn.addEventListener('click', () => {
+      if (!isPlaying) {
+        heroVideo.play().catch(() => {});
+        playBtn.style.opacity = '0';
+        playBtn.style.pointerEvents = 'none';
+        isPlaying = true;
+      }
+    });
+    heroVideo.addEventListener('ended', () => {
+      isPlaying = false;
+      playBtn.style.opacity = '1';
+      playBtn.style.pointerEvents = 'auto';
+    });
+  }
+
+  // ── MOUSE GLOW ──
+  const glow = document.getElementById('mouseGlow');
+  const hero = document.getElementById('hero');
+  if (glow && hero) {
+    hero.addEventListener('mousemove', (e) => {
+      const rect = hero.getBoundingClientRect();
+      glow.style.left = (e.clientX - rect.left) + 'px';
+      glow.style.top = (e.clientY - rect.top) + 'px';
+    });
+  }
+
+  // ── PARTICLES ──
+  const particleContainer = document.getElementById('particles');
+  if (particleContainer) {
+    const PARTICLE_COUNT = 25;
+    for (let i = 0; i < PARTICLE_COUNT; i++) {
+      const p = document.createElement('div');
+      const isTeal = Math.random() > 0.4;
+      p.className = `absolute rounded-full pointer-events-none ${isTeal ? 'bg-[#197d7d]/50' : 'bg-[#c88e1e]/50'}`;
+      p.style.left = Math.random() * 100 + '%';
+      p.style.bottom = '-10px';
+      p.style.width = (Math.random() * 3 + 1) + 'px';
+      p.style.height = p.style.width;
+      p.style.animation = `particleRise ${Math.random() * 12 + 10}s linear ${Math.random() * 10}s infinite`;
+      p.style.opacity = Math.random() * 0.6 + 0.2;
+      particleContainer.appendChild(p);
+    }
+  }
+
+  // ── COUNTER ANIMATION ──
+  const counters = document.querySelectorAll('[data-count]');
+  const counterObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const el = entry.target;
+        const target = parseInt(el.dataset.count);
+        const prefix = el.dataset.prefix || '';
+        const suffix = el.dataset.suffix || '';
+        let start = 0;
+        const duration = 2000;
+        const startTime = performance.now();
+
+        function update(now) {
+          const elapsed = now - startTime;
+          const progress = Math.min(elapsed / duration, 1);
+          const ease = 1 - Math.pow(1 - progress, 3);
+          const val = Math.round(start + (target - start) * ease);
+          el.textContent = prefix + val + suffix;
+          if (progress < 1) requestAnimationFrame(update);
+        }
+        requestAnimationFrame(update);
+        counterObserver.unobserve(el);
+      }
+    });
+  }, { threshold: 0.5 });
+
+  counters.forEach(c => counterObserver.observe(c));
+
+  // ── PARALLAX ON SCROLL ──
+  window.addEventListener('scroll', () => {
+    const scrollY = window.scrollY;
+    const slideshow = document.querySelector('.slideshow');
+    if (slideshow && scrollY < window.innerHeight) {
+      slideshow.style.transform = `translateY(${scrollY * 0.3}px) scale(${1 + scrollY * 0.0003})`;
+    }
+  });
+  document.addEventListener('DOMContentLoaded', function () {
+    const toggleBtn = document.getElementById('mobile-toggle');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    toggleBtn.addEventListener('click', function () {
+      mobileMenu.classList.toggle('hidden');
+    });
+
+    const mobileLinks = mobileMenu.querySelectorAll('a');
+    mobileLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.add('hidden');
+      });
+    });
+
+    document.querySelectorAll('.temp-fade-up.temp-animate').forEach(el => {
+      const obs = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            obs.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+      obs.observe(el);
+      if (el.getBoundingClientRect().top < window.innerHeight) el.classList.add('visible');
+    });
+  });
+
+  // Temperature slider + weather + count-up
+  (function initTemperatureSection() {
+    const tempData = [
+      { display: '-25°C', title: 'Ultra Deep Freeze', desc: 'Ideal for long-term frozen goods, ice cream, and deep-frozen commodities', theme: 'freeze' },
+      { display: '-15°C', title: 'Frozen Storage', desc: 'Perfect for frozen vegetables, meats, seafood, and ready-to-eat products', theme: 'frozen' },
+      { display: '0°C', title: 'Chilled Storage', desc: 'Perfect for fresh fruits, vegetables and dairy', theme: 'chill' },
+      { display: '+5°C', title: 'Cool Storage', desc: 'Optimal for beverages, confectionery, and temperature-sensitive packaged goods', theme: 'cool' },
+      { display: '+15°C', title: 'Controlled Ambient', desc: 'Suitable for chocolates, cosmetics, and pharma-grade ambient storage', theme: 'ambient' },
+      { display: '+25°C', title: 'Ambient Storage', desc: 'Dry goods, FMCG, and non-refrigerated inventory with climate control', theme: 'warm' }
+    ];
+
+    const accentByIndex = ['#0ea5e9', '#197d7d', '#197d7d', '#2d9d8a', '#c88e1e', '#d4a017'];
+    const displayGradients = [
+      'linear-gradient(135deg,#0c4a6e,#0ea5e9,#7dd3fc)',
+      'linear-gradient(135deg,#051919,#0f4b4b,#197d7d)',
+      'linear-gradient(135deg,#051919,#146464,#197d7d,#47b7b7)',
+      'linear-gradient(135deg,#0f4b4b,#197d7d,#75c9c9)',
+      'linear-gradient(135deg,#78350f,#c88e1e,#fbbf24)',
+      'linear-gradient(135deg,#92400e,#d4a017,#fde68a)'
+    ];
+
+    const tempSection = document.getElementById('temperature');
+    const tempFogLayer = document.getElementById('tempCinemaFog');
+    const tempSlider = document.getElementById('tempSlider');
+    const tempSliderWrap = document.getElementById('tempSliderWrap');
+    if (!tempSection || !tempFogLayer || !tempSlider || !tempSliderWrap) return;
+
+    const tempDisplayValue = document.getElementById('tempDisplayValue');
+    const tempDisplayTitle = document.getElementById('tempDisplayTitle');
+    const tempDisplayDesc = document.getElementById('tempDisplayDesc');
+    const tempMarkers = document.querySelectorAll('.temp-marker');
+    const tempCountNeg = document.getElementById('tempCountNeg');
+    const tempCountPos = document.getElementById('tempCountPos');
+    const tempRangeHeadline = document.getElementById('tempRangeHeadline');
+
+    let countAnimFrame = null;
+    let countDone = false;
+    let activeIndex = 2;
+    let isDragging = false;
+    let targetPct = 40;
+    let currentPct = 40;
+    let sliderAnimId = null;
+    let lastIndex = 2;
+
+    const pctFromIndex = i => (i / 5) * 100;
+    const indexFromPct = pct => Math.max(0, Math.min(5, Math.round((pct / 100) * 5)));
+
+    function pctFromEvent(e) {
+      const rect = tempSliderWrap.getBoundingClientRect();
+      const x = (e.touches && e.touches[0] ? e.touches[0].clientX : e.clientX) - rect.left;
+      return Math.max(0, Math.min(100, (x / rect.width) * 100));
+    }
+
+    let currentSmoke = 0;
+    let targetSmoke = 0;
+
+    function computeSmoke(pct) {
+      const p = clampedPct(pct);
+      const zeroAt = 40;
+      if (p >= zeroAt) return 0;
+      const t = 1 - p / zeroAt;
+      return Math.pow(t, 0.78);
+    }
+
+    function applySmokeVisual() {
+      currentSmoke = targetSmoke;
+      const s = currentSmoke;
+      tempFogLayer.style.setProperty('--temp-fog-deep', s.toFixed(3));
+      tempSection.style.setProperty('--temp-veil', (s * 0.38).toFixed(3));
+    }
+
+    function applySliderVisual(pct) {
+      const p = clampedPct(pct);
+      tempSliderWrap.style.setProperty('--slider-pct', p + '%');
+      tempSlider.value = p;
+      targetSmoke = computeSmoke(p);
+      applySmokeVisual();
+    }
+
+    function tickSliderSmooth() {
+      const diff = targetPct - currentPct;
+      if (Math.abs(diff) < 0.15) {
+        currentPct = targetPct;
+      } else {
+        currentPct += diff * (isDragging ? 0.35 : 0.22);
+      }
+      applySliderVisual(currentPct);
+      const i = indexFromPct(currentPct);
+      if (i !== lastIndex) {
+        lastIndex = i;
+        updateTemperature(i, false);
+      } else {
+        applyTempAccent(i);
+      }
+      if (Math.abs(targetPct - currentPct) >= 0.15) {
+        sliderAnimId = requestAnimationFrame(tickSliderSmooth);
+      } else {
+        sliderAnimId = null;
+      }
+    }
+
+    function startSmoothSlider(pct) {
+      targetPct = clampedPct(pct);
+      if (!sliderAnimId) sliderAnimId = requestAnimationFrame(tickSliderSmooth);
+    }
+
+    function clampedPct(pct) {
+      return Math.max(0, Math.min(100, pct));
+    }
+
+    function setSliderPosition(pct, updateContent = true, instant = false) {
+      const clamped = clampedPct(pct);
+      targetPct = clamped;
+      if (instant) {
+        currentPct = clamped;
+        applySliderVisual(clamped);
+        if (updateContent) {
+          const i = indexFromPct(clamped);
+          lastIndex = i;
+          if (i !== activeIndex) updateTemperature(i, false);
+          else applyTempAccent(i);
+        }
+        return;
+      }
+      if (updateContent) startSmoothSlider(clamped);
+      else {
+        currentPct = clamped;
+        applySliderVisual(clamped);
+      }
+    }
+
+    function applyTempAccent(index) {
+      const accent = accentByIndex[index] ?? '#197d7d';
+      tempSection.style.setProperty('--temp-accent', accent);
+      tempSection.dataset.tempTheme = tempData[index]?.theme || 'chill';
+      if (tempDisplayValue) {
+        tempDisplayValue.style.background = displayGradients[index] || displayGradients[2];
+        tempDisplayValue.style.webkitBackgroundClip = 'text';
+        tempDisplayValue.style.backgroundClip = 'text';
+        tempDisplayValue.style.webkitTextFillColor = 'transparent';
+        tempDisplayValue.style.color = 'transparent';
+      }
+    }
+
+    function animateCountTo25() {
+      if (!tempCountNeg || !tempCountPos) return;
+      if (countAnimFrame) cancelAnimationFrame(countAnimFrame);
+      const duration = 1600;
+      const start = performance.now();
+      const tick = (now) => {
+        const t = Math.min((now - start) / duration, 1);
+        const eased = 1 - Math.pow(1 - t, 3);
+        const n = Math.max(1, Math.round(1 + eased * 24));
+        tempCountNeg.textContent = n;
+        tempCountPos.textContent = n;
+        if (t < 1) countAnimFrame = requestAnimationFrame(tick);
+        else {
+          tempCountNeg.textContent = '25';
+          tempCountPos.textContent = '25';
+          countDone = true;
+        }
+      };
+      countAnimFrame = requestAnimationFrame(tick);
+    }
+
+    function updateTemperature(index, syncSlider = true) {
+      const i = Math.max(0, Math.min(5, parseInt(index, 10)));
+      activeIndex = i;
+      const data = tempData[i];
+      applyTempAccent(i);
+      [tempDisplayValue, tempDisplayTitle, tempDisplayDesc].forEach(el => el && el.classList.add('updating'));
+      setTimeout(() => {
+        if (tempDisplayValue) tempDisplayValue.textContent = data.display;
+        if (tempDisplayTitle) tempDisplayTitle.textContent = data.title;
+        if (tempDisplayDesc) tempDisplayDesc.textContent = data.desc;
+        [tempDisplayValue, tempDisplayTitle, tempDisplayDesc].forEach(el => el && el.classList.remove('updating'));
+      }, 180);
+      tempMarkers.forEach((m, idx) => m.classList.toggle('active', idx === i));
+      lastIndex = i;
+      if (syncSlider) setSliderPosition(pctFromIndex(i), false, true);
+      tempSlider.setAttribute('aria-valuenow', data.display.replace('°C', ''));
+    }
+
+    tempSliderWrap.addEventListener('mousemove', e => startSmoothSlider(pctFromEvent(e)));
+    tempSliderWrap.addEventListener('mousedown', e => {
+      isDragging = true;
+      tempSliderWrap.classList.add('is-dragging');
+      startSmoothSlider(pctFromEvent(e));
+    });
+    document.addEventListener('mouseup', () => {
+      isDragging = false;
+      tempSliderWrap.classList.remove('is-dragging');
+    });
+    document.addEventListener('mousemove', e => {
+      if (isDragging) startSmoothSlider(pctFromEvent(e));
+    });
+    tempSliderWrap.addEventListener('touchstart', e => {
+      isDragging = true;
+      tempSliderWrap.classList.add('is-dragging');
+      startSmoothSlider(pctFromEvent(e));
+    }, { passive: true });
+    tempSliderWrap.addEventListener('touchmove', e => {
+      if (isDragging) startSmoothSlider(pctFromEvent(e));
+    }, { passive: true });
+    tempSliderWrap.addEventListener('touchend', () => {
+      isDragging = false;
+      tempSliderWrap.classList.remove('is-dragging');
+    });
+    tempSlider.addEventListener('input', e => startSmoothSlider(parseFloat(e.target.value)));
+    tempMarkers.forEach(m => m.addEventListener('click', () => updateTemperature(m.dataset.index)));
+
+    if (tempRangeHeadline) {
+      const countObserver = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting && !countDone) animateCountTo25();
+        });
+      }, { threshold: 0.35 });
+      countObserver.observe(tempRangeHeadline);
+      if (tempRangeHeadline.getBoundingClientRect().top < window.innerHeight * 0.85) animateCountTo25();
+    }
+
+    targetSmoke = computeSmoke(40);
+    currentSmoke = targetSmoke;
+    applySmokeVisual();
+    setSliderPosition(pctFromIndex(2), false, true);
+    lastIndex = 2;
+    updateTemperature(2, false);
+  })();
+
+  (function initLocMap() {
+    const mapEl = document.getElementById('locMap');
+    if (!mapEl || typeof L === 'undefined') return;
+
+    const panel = document.getElementById('locDistancePanel');
+    const distTitle = document.getElementById('locDistTitle');
+    const distSub = document.getElementById('locDistSub');
+    const elPlane = document.getElementById('locDistPlane');
+    const elPort = document.getElementById('locDistPort');
+    const elCar = document.getElementById('locDistCar');
+    const metaPlane = document.getElementById('locDistPlaneMeta');
+    const metaPort = document.getElementById('locDistPortMeta');
+    const metaCar = document.getElementById('locDistCarMeta');
+
+    const hub = { name: 'TradJac Facility', lat: 18.7835, lng: 73.3168 };
+    const jnpt = { id: 'jnpt', name: 'JNPT Port', lat: 18.9528, lng: 72.951, clickable: true };
+    const naviMumbai = { id: 'navi', name: 'Navi Mumbai', lat: 19.1147, lng: 73.0565, clickable: true,
+      label: 'Navi Mumbai International Airport' };
+    const cbd = { id: 'cbd', name: 'Navi Mumbai CBD', lat: 19.033, lng: 73.029, clickable: false };
+
+    let activeRoute = null;
+    let activeMarkerId = null;
+    const destMarkers = {};
+
+    function haversineKm(a, b) {
+      const R = 6371;
+      const dLat = (b.lat - a.lat) * Math.PI / 180;
+      const dLng = (b.lng - a.lng) * Math.PI / 180;
+      const x = Math.sin(dLat / 2) ** 2 +
+        Math.cos(a.lat * Math.PI / 180) * Math.cos(b.lat * Math.PI / 180) * Math.sin(dLng / 2) ** 2;
+      return R * 2 * Math.atan2(Math.sqrt(x), Math.sqrt(1 - x));
+    }
+
+    function formatKm(km) {
+      return km < 1 ? (km * 1000).toFixed(0) + ' m' : km.toFixed(1) + ' km';
+    }
+
+    function formatDuration(minutes) {
+      if (minutes < 60) return Math.round(minutes) + ' min';
+      const h = Math.floor(minutes / 60);
+      const m = Math.round(minutes % 60);
+      return m ? h + ' hr ' + m + ' min' : h + ' hr';
+    }
+
+    async function fetchDrivingKm(from, to) {
+      const url = 'https://router.project-osrm.org/route/v1/driving/' +
+        from.lng + ',' + from.lat + ';' + to.lng + ',' + to.lat +
+        '?overview=false';
+      try {
+        const res = await fetch(url);
+        const data = await res.json();
+        if (data.code === 'Ok' && data.routes && data.routes[0]) {
+          return {
+            km: data.routes[0].distance / 1000,
+            min: data.routes[0].duration / 60
+          };
+        }
+      } catch (e) { /* fallback below */ }
+      const km = haversineKm(from, to) * 1.35;
+      return { km, min: (km / 45) * 60, estimated: true };
+    }
+
+    function setLoading(loading) {
+      [elPlane, elPort, elCar].forEach(el => {
+        const card = el.closest('.loc-dist-card');
+        if (loading) {
+          el.textContent = 'Calculating…';
+          if (card) card.classList.add('loc-dist-loading');
+        } else if (card) {
+          card.classList.remove('loc-dist-loading');
+        }
+      });
+    }
+
+    async function showDistances(dest) {
+      if (!dest.clickable) return;
+      panel.classList.remove('is-empty');
+      distTitle.textContent = 'Distance to ' + (dest.label || dest.name);
+      distSub.textContent = 'From TradJac Facility · Khopoli';
+      setLoading(true);
+
+      const airKm = haversineKm(hub, dest);
+      const airMin = (airKm / 450) * 60;
+      elPlane.textContent = formatKm(airKm);
+      metaPlane.textContent = 'Approx. ' + formatDuration(airMin) + ' by air';
+
+      const portTarget = jnpt;
+      const portDrive = await fetchDrivingKm(hub, portTarget);
+      if (dest.id === 'jnpt') {
+        elPort.textContent = 'Direct access';
+        metaPort.textContent = 'At JNPT gateway port';
+      } else {
+        elPort.textContent = formatKm(portDrive.km);
+        metaPort.textContent = (portDrive.estimated ? 'Est. ' : '') + formatDuration(portDrive.min) + ' drive to JNPT';
+      }
+
+      const carDrive = await fetchDrivingKm(hub, dest);
+      elCar.textContent = formatKm(carDrive.km);
+      metaCar.textContent = (carDrive.estimated ? 'Est. ' : '') + formatDuration(carDrive.min) + ' driving';
+
+      setLoading(false);
+      panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function drawRoute(dest, color) {
+      routeLayer.clearLayers();
+      if (activeRoute) map.removeLayer(activeRoute);
+      activeRoute = L.polyline(
+        [[hub.lat, hub.lng], [dest.lat, dest.lng]],
+        { color: color || '#197d7d', weight: 4, opacity: 0.85, dashArray: '12, 10' }
+      ).addTo(map);
+    }
+
+    function setActiveMarker(id) {
+      Object.keys(destMarkers).forEach(key => {
+        const m = destMarkers[key];
+        const el = m.getElement();
+        if (el) el.classList.toggle('loc-map-pin--active', key === id);
+      });
+      activeMarkerId = id;
+    }
+
+    const map = L.map('locMap', { scrollWheelZoom: false, zoomControl: true });
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+      maxZoom: 19,
+      subdomains: 'abcd',
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/">CARTO</a>'
+    }).addTo(map);
+
+    function makeIcon(isHub, isActive) {
+      return L.divIcon({
+        className: 'loc-map-pin' + (isHub ? ' loc-map-pin--hub' : '') + (isActive ? ' loc-map-pin--active' : ''),
+        html: '<span aria-hidden="true"></span>',
+        iconSize: isHub ? [28, 28] : [20, 20],
+        iconAnchor: isHub ? [14, 28] : [10, 20],
+        popupAnchor: [0, isHub ? -28 : -20]
+      });
+    }
+
+    const hubMarker = L.marker([hub.lat, hub.lng], { icon: makeIcon(true), zIndexOffset: 1000 })
+      .addTo(map)
+      .bindPopup('<div class="loc-map-popup"><strong>' + hub.name + '</strong><small>Cold Storage · HQ</small></div>');
+
+    const clickableDests = [jnpt, naviMumbai];
+    const allDests = [jnpt, naviMumbai, cbd];
+    const markers = [hubMarker];
+
+    allDests.forEach(place => {
+      const isClick = place.clickable;
+      const marker = L.marker([place.lat, place.lng], { icon: makeIcon(false) }).addTo(map);
+      marker.bindPopup(
+        '<div class="loc-map-popup"><strong>' + (place.label || place.name) + '</strong>' +
+        (isClick ? '<small>Click for distance details</small>' : '') + '</div>'
+      );
+      if (isClick) {
+        destMarkers[place.id] = marker;
+        marker.on('click', (e) => {
+          L.DomEvent.stopPropagation(e);
+          setActiveMarker(place.id);
+          drawRoute(place, place.id === 'jnpt' ? '#0B5ED7' : '#197d7d');
+          showDistances(place);
+        });
+      }
+      markers.push(marker);
+    });
+
+    map.on('click', () => {
+      if (activeRoute) { map.removeLayer(activeRoute); activeRoute = null; }
+      setActiveMarker(null);
+    });
+
+    map.fitBounds(L.featureGroup(markers).getBounds().pad(0.14));
+
+    const resizeObserver = new ResizeObserver(() => map.invalidateSize());
+    resizeObserver.observe(mapEl);
+    window.addEventListener('load', () => map.invalidateSize());
+  })();
+</script>
+
+</body>
+</html>

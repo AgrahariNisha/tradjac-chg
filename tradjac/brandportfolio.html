@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Brand Portfolio - TradJac</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#197d7d',
+            secondary: '#c88e1e'
+          }
+        }
+      }
+    }
+  </script>
+</head>
+
+<body class="bg-white text-gray-800">
+
+<!-- NAVBAR -->
+<header class="sticky top-0 bg-white shadow-sm border-b z-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between relative">
+
+    <!-- LOGO -->
+    <div class="flex items-center gap-3">
+      <a href="index.html">
+        <img src="assets/Tradjac Logo.jpeg" class="h-14 sm:h-16 md:h-20 lg:h-24 w-auto object-contain" alt="TradJac Logo" />
+      </a>
+    </div>
+
+    <!-- DESKTOP MENU -->
+    <ul class="hidden lg:flex gap-8 xl:gap-10 font-semibold text-base items-center">
+      <li><a href="index.html" class="hover:text-primary font-bold text-primary py-2">Home</a></li>
+      <li><a href="services.html" class="hover:text-primary py-2">Services</a></li>
+      <li><a href="about.html" class="hover:text-primary py-2">About</a></li>
+      <li><a href="brandportfolio.html" class="hover:text-primary py-2">Brand Portfolio</a></li>
+      <li><a href="contact.html" class="hover:text-primary py-2">Contact</a></li>
+    </ul>
+
+    <!-- DESKTOP CTA -->
+    <a href="contact.html" class="hidden lg:block bg-primary text-white px-6 py-3 rounded-full font-bold hover:bg-teal-700 transition-all duration-300">
+      Get Started
+    </a>
+
+    <!-- MOBILE HAMBURGER -->
+    <button id="mobile-toggle" class="lg:hidden p-2 rounded-lg hover:bg-gray-100 transition-all duration-200">
+      <span class="sr-only">Menu</span>
+      <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+      </svg>
+    </button>
+
+    <!-- MOBILE MENU -->
+    <div id="mobile-menu" class="lg:hidden hidden absolute top-full left-0 w-full bg-white shadow-2xl border-t border-gray-200 z-50 px-4 sm:px-6 py-6">
+      <ul class="space-y-3 text-base sm:text-lg font-semibold">
+        <li><a href="index.html" class="block py-3 px-4 hover:bg-primary/10 rounded-xl text-primary font-bold">Home</a></li>
+        <li><a href="services.html" class="block py-3 px-4 hover:bg-primary/10 rounded-xl">Services</a></li>
+        <li><a href="about.html" class="block py-3 px-4 hover:bg-primary/10 rounded-xl">About</a></li>
+        <li><a href="brandportfolio.html" class="block py-3 px-4 hover:bg-primary/10 rounded-xl">Brand Portfolio</a></li>
+        <li><a href="contact.html" class="block py-3 px-4 hover:bg-primary/10 rounded-xl">Contact</a></li>
+      </ul>
+
+      <a href="contact.html" class="block w-full mt-6 bg-gradient-to-r from-primary to-teal-600 text-white py-4 px-6 rounded-2xl font-bold text-center text-base sm:text-lg hover:shadow-xl transition-all duration-300">
+        Get Started
+      </a>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="py-20 bg-gradient-to-r from-teal-50 to-white text-center">
+  <h1 class="text-4xl md:text-5xl font-bold text-primary mb-4">Our Brand Portfolio</h1>
+  <p class="text-gray-600 max-w-3xl mx-auto leading-relaxed">
+    TradJac is associated with a strong network of globally connected companies,
+    working together to create seamless business opportunities across international markets.
+    Through trusted partnerships, we continue to expand our reach and strengthen our presence worldwide.
+  </p>
+</section>
+
+<!-- BRANDS -->
+<section class="py-20">
+  <div class="max-w-6xl mx-auto px-4 space-y-16">
+
+    <!-- NovaFresco -->
+    <div class="grid md:grid-cols-2 gap-10 items-center">
+      <div>
+        <h2 class="text-2xl font-bold text-primary mb-3">NovaFresco</h2>
+        <p class="text-gray-600 leading-relaxed">
+          NovaFresco stands for freshness, quality, and premium produce solutions.
+          The brand focuses on delivering carefully selected products with strong attention
+          to consistency, presentation, and customer satisfaction.
+        </p>
+      </div>
+      <div class="bg-white rounded-2xl shadow-lg flex items-center justify-center p-6">
+        <img src="assets/novafresco.jpeg" class="w-full h-60 object-contain"/>
+      </div>
+    </div>
+
+    <!-- NovaFresh -->
+    <div class="grid md:grid-cols-2 gap-10 items-center">
+      <div class="md:order-2">
+        <h2 class="text-2xl font-bold text-primary mb-3">NovaFresh</h2>
+        <p class="text-gray-600 leading-relaxed">
+          NovaFresh represents reliable fresh product solutions designed to meet modern market demands.
+          With a focus on quality handling and supply efficiency, the brand supports businesses with
+          dependable service and product excellence.
+        </p>
+      </div>
+      <div class="bg-white rounded-2xl shadow-lg flex items-center justify-center p-6 md:order-1">
+        <img src="assets/novafresh.jpeg" class="w-full h-60 object-contain"/>
+      </div>
+    </div>
+
+    <!-- Faina Universal -->
+    <div class="grid md:grid-cols-2 gap-10 items-center">
+      <div>
+        <h2 class="text-2xl font-bold text-primary mb-3">Faina Universal</h2>
+        <p class="text-gray-600 leading-relaxed">
+          Faina Universal is built on trust, experience, and global business vision.
+          The company reflects strong values in sourcing, trade, and professional commitment,
+          helping build meaningful partnerships across international markets.
+        </p>
+      </div>
+      <div class="bg-white rounded-2xl shadow-lg flex items-center justify-center p-6">
+        <img src="assets/faina.jpeg" class="w-full h-60 object-contain"/>
+      </div>
+    </div>
+
+    <!-- Falcon International -->
+    <div class="grid md:grid-cols-2 gap-10 items-center">
+      <div class="md:order-2">
+        <h2 class="text-2xl font-bold text-primary mb-3">Falcon International</h2>
+        <p class="text-gray-600 leading-relaxed">
+          Falcon International symbolizes growth, reach, and international business strength.
+          With a forward-looking approach, the company supports cross-border opportunities
+          and creates value through strong trade connections and professional execution.
+        </p>
+      </div>
+      <div class="bg-white rounded-2xl shadow-lg flex items-center justify-center p-6 md:order-1">
+        <img src="assets/falcon .jpeg" class="w-full h-60 object-contain"/>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="py-20 text-center">
+  <div class="max-w-3xl mx-auto bg-primary text-white p-10 rounded-2xl">
+    <h2 class="text-3xl font-bold mb-3">Let’s Grow Together</h2>
+    <p class="mb-4">Building connections across the world, together.</p>
+    <a href="contact.html" class="bg-secondary px-6 py-3 rounded-full font-bold">Contact Us</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="bg-teal-900 text-white pt-12 pb-6">
+  <div class="max-w-6xl mx-auto px-6 grid md:grid-cols-3 gap-10">
+
+    <!-- COMPANY -->
+    <div>
+      <h2 class="text-xl font-bold mb-4">TradJac</h2>
+      <p class="text-sm text-gray-300 leading-relaxed">
+        Trusted 3PL partner specializing in cold storage, warehousing, and logistics solutions.
+        Delivering efficiency, safety, and reliability across your supply chain.
+      </p>
+    </div>
+
+    <!-- LINKS -->
+    <div>
+      <h2 class="text-xl font-bold mb-4">Quick Links</h2>
+      <ul class="space-y-2 text-gray-300 text-sm">
+        <li><a href="index.html" class="hover:text-white">Home</a></li>
+        <li><a href="services.html" class="hover:text-white">Services</a></li>
+        <li><a href="about.html" class="hover:text-white">About</a></li>
+        <li><a href="contact.html" class="hover:text-white">Contact</a></li>
+      </ul>
+    </div>
+
+    <!-- LOCATION -->
+    <div>
+      <h2 class="text-xl font-bold mb-4">Our Locations</h2>
+
+      <!-- Cold Storage -->
+      <p class="text-sm text-gray-300 leading-relaxed mb-4">
+        ❄️ <span class="font-semibold text-white">Cold Storage:</span><br>
+        Ajiwali Village, Khopoli - Pen Road<br>
+        Tal - Khalapur, Dist. Khopoli<br>
+        Maharashtra - 410203
+      </p>
+
+      <!-- Office -->
+      <p class="text-sm text-gray-300 leading-relaxed">
+        🏢 <span class="font-semibold text-white">Office:</span><br>
+        GRD/2 Vijaya Bhavan, CTS – 61<br>
+        Prabhat Colony Road No.7, Santacruz (East)<br>
+        Opp. Albert Mansion, Mumbai – 400056, India
+      </p>
+    </div>
+
+  </div>
+
+  <!-- COPYRIGHT -->
+  <div class="border-t border-teal-700 mt-8 pt-4 text-center text-sm text-gray-400">
+    © 2026 TradJac. All Rights Reserved.
+  </div>
+</footer>
+
+<script>
+  document.getElementById("mobile-toggle").onclick = function () {
+    document.getElementById("mobile-menu").classList.toggle("hidden");
+  };
+</script>
+
+</body>
+</html>
